@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - BuildSynq</title>
+    <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #1A1A2E;
+            --light: #F4F4F9;
+            --text: #2D2D3A;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--light);
+            line-height: 1.6;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+        .logo {
+            font-family: 'Darker Grotesque', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .cta-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        .hero {
+            padding: 12rem 5% 6rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+        .hero h1 {
+            font-family: 'Darker Grotesque', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .guides-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-family: 'Darker Grotesque', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        .section-header p {
+            font-size: 1.3rem;
+            color: #666;
+        }
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+        .guide-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        .guide-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+        .guide-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .guide-card h3 {
+            font-family: 'Darker Grotesque', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        .guide-card p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .guide-card .read-time {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        footer {
+            padding: 3rem 5%;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-links { display: none; }
+            .guides-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">BuildSynq</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="resources.html">Resources</a>
+            <a href="Tools.html">Tools</a>
+            <a href="#" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Resources</h1>
+        <p>Complete guides for residential homeowners, commercial developers, and government infrastructure projects</p>
+    </div>
+
+    <div class="guides-section">
+        <div class="section-header">
+            <h2>Construction Management Guides</h2>
+            <p>Learn how to manage payments, compliance, and project coordination</p>
+        </div>
+
+        <div class="guides-grid">
+            <a href="guide-residential-complete.html" class="guide-card">
+                <div class="guide-icon">🏠</div>
+                <h3>Residential Payment Guide</h3>
+                <p>The complete guide to home renovation payments. Protect yourself from payment disputes and contractor fraud while ensuring fair contractor payments.</p>
+                <span class="read-time">10 min read</span>
+            </a>
+
+            <a href="guide-commercial-portfolio.html" class="guide-card">
+                <div class="guide-icon">🏢</div>
+                <h3>Commercial Portfolio Management</h3>
+                <p>How to manage 20+ commercial projects without adding 10+ project managers. AI coordination, instant payments, and portfolio-level control.</p>
+                <span class="read-time">12 min read</span>
+            </a>
+
+            <a href="guide-government-compliance.html" class="guide-card">
+                <div class="guide-icon">🏛️</div>
+                <h3>Government Compliance Guide</h3>
+                <p>Complete guide to federal infrastructure compliance. Blockchain automation eliminates 80% of compliance admin while ensuring 100% audit readiness.</p>
+                <span class="read-time">15 min read</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 BuildSynq. Construction management revolutionized.</p>
+    </footer>
+</body>
+</html>
