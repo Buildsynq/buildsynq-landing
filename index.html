@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildSynq - Construction Management Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --secondary: #8B5CF6;
+            --dark: #1E293B;
+            --gray: #64748B;
+            --light: #F8FAFC;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 12rem 5% 8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 3rem;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.7rem 1.8rem;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Solutions Section */
+        .solutions {
+            padding: 8rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .solution-features {
+            margin-bottom: 2rem;
+        }
+
+        .solution-features li {
+            color: var(--gray);
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .solution-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .solution-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .solution-btn:hover {
+            background: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        /* Stats */
+        .stats {
+            padding: 6rem 5%;
+            background: white;
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">BuildSynq</div>
+        <nav class="nav-links">
+            <a href="#solutions">Solutions</a>
+            <a href="tools.html">Tools</a>
+            <a href="https://calendly.com/rob-buildsynq/30min" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">AI-POWERED CONSTRUCTION MANAGEMENT</span>
+            <h1>Built for Every Construction Project</h1>
+            <p>Smart contract payments, AI coordination, and blockchain transparency for residential, commercial, and government projects</p>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Faster Payment Processing</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">48hrs</div>
+                <div class="stat-label">Average Payment Approval</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Blockchain Audit Trail</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2-3wk</div>
+                <div class="stat-label">Early Delay Detection</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solutions" id="solutions">
+        <div class="section-header">
+            <h2>Which Solution Is Right For You?</h2>
+            <p>Choose the BuildSynq platform built specifically for your construction vertical</p>
+        </div>
+
+        <div class="solutions-grid">
+            <!-- Residential -->
+            <div class="solution-card">
+                <div class="solution-icon">🏠</div>
+                <h3>Residential</h3>
+                <p>For homeowners and contractors managing home renovations and new builds</p>
+                <ul class="solution-features">
+                    <li>Smart payment milestones</li>
+                    <li>Daily mobile updates with photos</li>
+                    <li>Blockchain payment protection</li>
+                    <li>Zero payment disputes</li>
+                </ul>
+                <a href="/residential.html" class="solution-btn">Explore Residential →</a>
+            </div>
+
+            <!-- Commercial -->
+            <div class="solution-card">
+                <div class="solution-icon">🏢</div>
+                <h3>Commercial</h3>
+                <p>For developers and GCs managing multiple commercial projects simultaneously</p>
+                <ul class="solution-features">
+                    <li>Portfolio dashboard</li>
+                    <li>AI risk detection</li>
+                    <li>1-click payment approvals</li>
+                    <li>Financial analytics</li>
+                </ul>
+                <a href="/commercial.html" class="solution-btn">Explore Commercial →</a>
+            </div>
+
+            <!-- Government -->
+            <div class="solution-card">
+                <div class="solution-icon">🏛️</div>
+                <h3>Government</h3>
+                <p>For municipalities managing federal-funded infrastructure projects</p>
+                <ul class="solution-features">
+                    <li>Automated compliance tracking</li>
+                    <li>Public transparency portal</li>
+                    <li>DBE/MBE monitoring</li>
+                    <li>FOIA-ready documentation</li>
+                </ul>
+                <a href="/government.html" class="solution-btn">Explore Government →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 BuildSynq. Construction management revolutionized.</p>
+    </footer>
+</body>
+</html>

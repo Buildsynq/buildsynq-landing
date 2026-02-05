@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BuildSynq Tools</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+.header { background: white; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.logo { font-size: 1.5rem; font-weight: bold; color: #6366F1; }
+.hero { background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; padding: 6rem 2rem 3rem; text-align: center; }
+.hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.tools { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.card { background: white; padding: 2rem; border-radius: 8px; cursor: pointer; }
+.card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+.card h3 { margin: 1rem 0 0.5rem; }
+.modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 999; }
+.modal.show { display: flex !important; }
+.modal-box { background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+.close { float: right; font-size: 2rem; cursor: pointer; line-height: 1; }
+input, select { width: 100%; padding: 0.5rem; margin: 0.5rem 0 1rem; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+button { width: 100%; padding: 1rem; background: #6366F1; color: white; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
+button:hover { background: #5558E3; }
+.result { margin-top: 1.5rem; padding: 1.5rem; background: #f0f0f0; border-radius: 4px; }
+.big { font-size: 2rem; font-weight: bold; color: #6366F1; margin: 0.5rem 0; }
+</style>
+</head>
+<body>
+<div class="header"><div class="logo">BuildSynq</div>
+        <nav class="nav-links" style="display: flex; gap: 2rem; align-items: center;">
+            <a href="index.html" style="text-decoration: none; color: #666; font-weight: 500;">Home</a>
+            <a href="index.html#solutions" style="text-decoration: none; color: #666; font-weight: 500;">Solutions</a>
+            <a href="https://calendly.com/rob-buildsynq/30min" style="background: #6366F1; color: white; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Get Started</a>
+        </nav></div>
+<div class="hero"><h1>Free Construction Calculators</h1><p>Calculate savings and ROI</p></div>
+<div class="tools">
+<div class="card" onclick="show('m1')"><div style="font-size:3rem">💰</div><h3>Payment Calculator</h3></div>
+<div class="card" onclick="show('m2')"><div style="font-size:3rem">📋</div><h3>Smart Contract</h3></div>
+<div class="card" onclick="show('m3')"><div style="font-size:3rem">🔗</div><h3>Blockchain</h3></div>
+<div class="card" onclick="show('m4')"><div style="font-size:3rem">🏠</div><h3>Cost Estimator</h3></div>
+<div class="card" onclick="show('m5')"><div style="font-size:3rem">📊</div><h3>Portfolio</h3></div>
+<div class="card" onclick="show('m6')"><div style="font-size:3rem">🤖</div><h3>AI Coordination</h3></div>
+<div class="card" onclick="show('m7')"><div style="font-size:3rem">⚖️</div><h3>Compliance</h3></div>
+</div>
+
+<div class="modal" id="m1"><div class="modal-box">
+<span class="close" onclick="hide('m1')">&times;</span>
+<h2>Payment Calculator</h2>
+<label>Projects/year: <input type="number" id="p1" value="12"></label>
+<label>Payments/project: <input type="number" id="p2" value="10"></label>
+<label>Hours/payment: <input type="number" id="p3" value="8"></label>
+<label>Hourly rate: <input type="number" id="p4" value="75"></label>
+<button onclick="calc1()">Calculate</button>
+<div id="r1"></div>
+</div></div>
+
+<div class="modal" id="m2"><div class="modal-box">
+<span class="close" onclick="hide('m2')">&times;</span>
+<h2>Smart Contract</h2>
+<label>Contract value: <input type="number" id="c1" value="500000"></label>
+<label>Milestones: <input type="number" id="c2" value="8"></label>
+<label>Retention %: <input type="number" id="c3" value="10"></label>
+<button onclick="calc2()">Calculate</button>
+<div id="r2"></div>
+</div></div>
+
+<div class="modal" id="m3"><div class="modal-box">
+<span class="close" onclick="hide('m3')">&times;</span>
+<h2>Blockchain Explorer</h2>
+<label>Project: <select id="b1">
+<option value="kitchen">Kitchen - $45K</option>
+<option value="office">Office - $5.2M</option>
+<option value="bridge">Bridge - $8.2M</option>
+</select></label>
+<button onclick="calc3()">View Records</button>
+<div id="r3"></div>
+</div></div>
+
+<div class="modal" id="m4"><div class="modal-box">
+<span class="close" onclick="hide('m4')">&times;</span>
+<h2>Cost Estimator</h2>
+<label>Type: <select id="t1">
+<option>Kitchen</option>
+<option>Bathroom</option>
+<option>Addition</option>
+<option>Basement</option>
+</select></label>
+<label>Size (sq ft): <input type="number" id="t2" value="200"></label>
+<label>Quality: <select id="t3">
+<option>Budget</option>
+<option>Mid-Range</option>
+<option>High-End</option>
+<option>Luxury</option>
+</select></label>
+<button onclick="calc4()">Estimate</button>
+<div id="r4"></div>
+</div></div>
+
+<div class="modal" id="m5"><div class="modal-box">
+<span class="close" onclick="hide('m5')">&times;</span>
+<h2>Portfolio Analyzer</h2>
+<label>Active projects: <input type="number" id="pf1" value="8"></label>
+<label>Hours/week oversight: <input type="number" id="pf2" value="25"></label>
+<label>Avg project value: <input type="number" id="pf3" value="5000000"></label>
+<button onclick="calc5()">Analyze</button>
+<div id="r5"></div>
+</div></div>
+
+<div class="modal" id="m6"><div class="modal-box">
+<span class="close" onclick="hide('m6')">&times;</span>
+<h2>AI Coordination</h2>
+<label>Project value: <input type="number" id="ai1" value="10000000"></label>
+<label>Issues/project: <input type="number" id="ai2" value="15"></label>
+<label>Cost/delay day: <input type="number" id="ai3" value="5000"></label>
+<button onclick="calc6()">Calculate</button>
+<div id="r6"></div>
+</div></div>
+
+<div class="modal" id="m7"><div class="modal-box">
+<span class="close" onclick="hide('m7')">&times;</span>
+<h2>Compliance Calculator</h2>
+<label>Project value: <input type="number" id="cm1" value="8000000"></label>
+<label>Hours/month compliance: <input type="number" id="cm2" value="60"></label>
+<button onclick="calc7()">Calculate</button>
+<div id="r7"></div>
+</div></div>
+
+<script>
+function show(id) { document.getElementById(id).classList.add('show'); }
+function hide(id) { document.getElementById(id).classList.remove('show'); }
+
+function calc1() {
+    const v = parseFloat(document.getElementById('p1').value) * parseFloat(document.getElementById('p2').value) * parseFloat(document.getElementById('p3').value) * parseFloat(document.getElementById('p4').value);
+    const s = v * 0.15;
+    document.getElementById('r1').innerHTML = '<div class="result">Current: <div class="big">$'+v.toLocaleString()+'</div>With BuildSynq: <div class="big">$'+s.toLocaleString()+'</div>Savings: <div class="big" style="color:#10B981">$'+(v-s).toLocaleString()+'</div></div>';
+}
+
+function calc2() {
+    const v = parseFloat(document.getElementById('c1').value);
+    const m = parseInt(document.getElementById('c2').value);
+    const r = parseFloat(document.getElementById('c3').value);
+    const d = v * (1 - r/100);
+    const a = d / m;
+    document.getElementById('r2').innerHTML = '<div class="result">Schedule: <div class="big">'+m+' Milestones</div>Avg Payment: <div class="big">$'+a.toLocaleString()+'</div>Approval: <div class="big" style="color:#10B981">48 hours</div></div>';
+}
+
+function calc3() {
+    const p = document.getElementById('b1').value;
+    const data = {kitchen:{e:47,h:'0x7f3d2e1a9b8c'},office:{e:823,h:'0x4a2b3c9d8e7f'},bridge:{e:612,h:'0x9e8d7c6b5a4f'}};
+    document.getElementById('r3').innerHTML = '<div class="result">Events: <div class="big">'+data[p].e+'</div>Hash: <div style="font-family:monospace;margin:1rem 0">'+data[p].h+'</div>Dispute Prevention: <div class="big" style="color:#10B981">100%</div></div>';
+}
+
+function calc4() {
+    const rates = {Kitchen:{Budget:80,'Mid-Range':150,'High-End':250,Luxury:400},Bathroom:{Budget:100,'Mid-Range':200,'High-End':350,Luxury:500},Addition:{Budget:120,'Mid-Range':200,'High-End':350,Luxury:550},Basement:{Budget:60,'Mid-Range':120,'High-End':200,Luxury:350}};
+    const t = document.getElementById('t1').value;
+    const s = parseFloat(document.getElementById('t2').value);
+    const q = document.getElementById('t3').value;
+    const total = s * rates[t][q];
+    const m = total<30000?4:total<50000?5:total>100000?8:6;
+    document.getElementById('r4').innerHTML = '<div class="result">Cost: <div class="big">$'+total.toLocaleString()+'</div>Milestones: <div class="big">'+m+'</div>Approval: <div class="big" style="color:#10B981">48 hours</div></div>';
+}
+
+function calc5() {
+    const projects = parseFloat(document.getElementById('pf1').value);
+    const hours = parseFloat(document.getElementById('pf2').value);
+    const value = parseFloat(document.getElementById('pf3').value);
+    const saved = hours * 0.6;
+    const cap = Math.floor(saved/(hours/projects));
+    const rev = cap * value * 0.03;
+    document.getElementById('r5').innerHTML = '<div class="result">Time Saved: <div class="big">'+saved.toFixed(1)+' hrs/wk</div>Capacity: <div class="big">+'+cap+' Projects</div>Revenue: <div class="big" style="color:#10B981">$'+rev.toLocaleString()+'</div></div>';
+}
+
+function calc6() {
+    const v = parseFloat(document.getElementById('ai1').value);
+    const i = parseFloat(document.getElementById('ai2').value);
+    const d = parseFloat(document.getElementById('ai3').value);
+    const cost = i * 3 * d;
+    const savings = cost * 0.7;
+    document.getElementById('r6').innerHTML = '<div class="result">Failure Cost: <div class="big">$'+cost.toLocaleString()+'</div>Prevention: <div class="big" style="color:#10B981">70%</div>Savings: <div class="big" style="color:#10B981">$'+savings.toLocaleString()+'</div></div>';
+}
+
+function calc7() {
+    const v = parseFloat(document.getElementById('cm1').value);
+    const h = parseFloat(document.getElementById('cm2').value);
+    const current = h * 12 * 150;
+    const savings = current * 0.8;
+    document.getElementById('r7').innerHTML = '<div class="result">Current Cost: <div class="big">$'+current.toLocaleString()+'</div>Reduction: <div class="big" style="color:#10B981">80%</div>Savings: <div class="big" style="color:#10B981">$'+savings.toLocaleString()+'</div></div>';
+}
+</script>
+</body>
+</html>
