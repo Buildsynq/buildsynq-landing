@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildSynq - Free Construction Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF6B35;
+            --primary-light: #FF8A5C;
+            --dark: #1A1A2E;
+            --light: #F4F4F9;
+            --accent: #FFD93D;
+            --text: #2D2D3A;
+            --green: #10B981;
+            --red: #EF4444;
+            --amber: #F59E0B;
+            --purple: #667eea;
+            --purple-dark: #764ba2;
+        }
+        body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--light); line-height: 1.6; overflow-x: hidden; }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        .logo { font-family: 'Darker Grotesque', sans-serif; font-size: 2rem; font-weight: 900; color: var(--dark); letter-spacing: -0.02em; text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .cta-button { background: var(--primary); color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: 2px solid var(--primary); }
+        .cta-button:hover { background: transparent; color: var(--primary); transform: translateY(-2px); }
+
+        /* Hero */
+        .hero {
+            padding: 10rem 5% 4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center; color: white;
+        }
+        .hero h1 { font-family: 'Darker Grotesque', sans-serif; font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+        /* Tool Navigation */
+        .tool-nav {
+            display: flex; justify-content: center; gap: 1rem; padding: 2rem 5%;
+            background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky; top: 72px; z-index: 100; flex-wrap: wrap;
+        }
+        .tool-nav-btn {
+            padding: 0.8rem 1.5rem; border-radius: 50px; border: 2px solid #E2E8F0;
+            background: white; font-weight: 600; cursor: pointer; transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--text);
+        }
+        .tool-nav-btn:hover { border-color: var(--purple); color: var(--purple); }
+        .tool-nav-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
+
+        /* Tool Sections */
+        .tool-section { display: none; max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+        .tool-section.active { display: block; }
+        .tool-section h2 { font-family: 'Darker Grotesque', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .tool-section .subtitle { color: #64748B; margin-bottom: 2rem; font-size: 1.05rem; }
+
+        /* Shared Form Styles */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label { font-weight: 600; font-size: 0.9rem; color: #475569; }
+        .form-group input, .form-group select {
+            padding: 0.8rem 1rem; border: 2px solid #E2E8F0; border-radius: 10px;
+            font-size: 1rem; font-family: 'DM Sans', sans-serif; transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--purple); }
+        .form-group .input-hint { font-size: 0.78rem; color: #94A3B8; }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            color: white; border: none; padding: 1rem 2.5rem; border-radius: 50px;
+            font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif; display: block; margin: 0 auto 2rem;
+        }
+        .calculate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
+
+        /* Results */
+        .results-area { display: none; }
+        .results-area.visible { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .result-card {
+            background: white; border-radius: 16px; padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 1.5rem;
+        }
+        .result-card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--dark); }
+        .result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #F1F5F9; }
+        .result-row:last-child { border-bottom: none; }
+        .result-label { color: #64748B; font-size: 0.95rem; }
+        .result-value { font-weight: 700; font-size: 1rem; }
+        .result-value.green { color: var(--green); }
+        .result-value.red { color: var(--red); }
+        .result-value.amber { color: var(--amber); }
+        .result-value.purple { color: var(--purple); }
+
+        .big-stat { text-align: center; padding: 1.5rem; }
+        .big-stat .number { font-family: 'Darker Grotesque', sans-serif; font-size: 3rem; font-weight: 900; line-height: 1; }
+        .big-stat .label { font-size: 0.85rem; color: #64748B; margin-top: 0.3rem; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-box { background: white; border-radius: 14px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .stat-box .number { font-family: 'Darker Grotesque', sans-serif; font-size: 2.2rem; font-weight: 900; line-height: 1.1; }
+        .stat-box .label { font-size: 0.8rem; color: #64748B; margin-top: 0.3rem; }
+
+        /* Bid Comparison Specific */
+        .bid-entry {
+            background: white; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 2px solid #E2E8F0;
+        }
+        .bid-entry h3 { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 1.1rem; }
+        .bid-number { background: var(--purple); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; }
+        .line-items { margin-top: 1rem; }
+        .line-item-row { display: grid; grid-template-columns: 2fr 1fr 40px; gap: 0.8rem; align-items: center; margin-bottom: 0.6rem; }
+        .line-item-row input { padding: 0.6rem 0.8rem; border: 1.5px solid #E2E8F0; border-radius: 8px; font-size: 0.9rem; font-family: 'DM Sans', sans-serif; }
+        .line-item-row input:focus { outline: none; border-color: var(--purple); }
+        .remove-btn { background: none; border: none; color: #CBD5E1; font-size: 1.3rem; cursor: pointer; }
+        .remove-btn:hover { color: var(--red); }
+        .add-line-btn {
+            background: none; border: 2px dashed #CBD5E1; border-radius: 8px;
+            padding: 0.5rem; width: 100%; cursor: pointer; color: #94A3B8; font-weight: 600;
+            font-family: 'DM Sans', sans-serif; transition: all 0.3s;
+        }
+        .add-line-btn:hover { border-color: var(--purple); color: var(--purple); }
+
+        .comparison-table { width: 100%; border-collapse: collapse; }
+        .comparison-table th { text-align: left; padding: 0.8rem; background: #F8FAFC; font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; }
+        .comparison-table td { padding: 0.8rem; border-bottom: 1px solid #F1F5F9; }
+        .comparison-table tr.highlight td { background: #F0FFF4; }
+        .flag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .flag.warning { background: #FFF7ED; color: #C2410C; }
+        .flag.good { background: #F0FFF4; color: #15803D; }
+        .flag.info { background: #EFF6FF; color: #1D4ED8; }
+
+        /* Timeline Specific */
+        .timeline-bar {
+            position: relative; height: 50px; border-radius: 12px; overflow: hidden;
+            background: #F1F5F9; margin-bottom: 0.5rem;
+        }
+        .timeline-fill { height: 100%; border-radius: 12px; display: flex; align-items: center; padding: 0 1rem; color: white; font-weight: 700; font-size: 0.9rem; transition: width 0.8s ease; }
+        .timeline-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #94A3B8; margin-bottom: 1.5rem; }
+        .cashflow-row { display: grid; grid-template-columns: 80px 1fr 100px; gap: 1rem; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #F1F5F9; }
+        .cashflow-bar { height: 24px; border-radius: 6px; transition: width 0.6s ease; }
+
+        /* CTA Section */
+        .tool-cta {
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            border-radius: 20px; padding: 3rem; text-align: center; color: white; margin-top: 2rem;
+        }
+        .tool-cta h3 { font-family: 'Darker Grotesque', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .tool-cta p { opacity: 0.9; margin-bottom: 1.5rem; }
+        .tool-cta a {
+            display: inline-block; background: white; color: var(--purple); padding: 0.9rem 2.5rem;
+            border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s;
+        }
+        .tool-cta a:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+
+        /* Lead Capture */
+        .lead-capture {
+            background: white; border-radius: 14px; padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center; margin-top: 1.5rem;
+        }
+        .lead-capture p { font-size: 0.95rem; color: #64748B; margin-bottom: 1rem; }
+        .lead-capture form { display: flex; gap: 0.8rem; max-width: 500px; margin: 0 auto; }
+        .lead-capture input[type="email"] {
+            flex: 1; padding: 0.8rem 1rem; border: 2px solid #E2E8F0; border-radius: 50px;
+            font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+        }
+        .lead-capture input[type="email"]:focus { outline: none; border-color: var(--purple); }
+        .lead-capture button {
+            background: var(--primary); color: white; border: none; padding: 0.8rem 1.8rem;
+            border-radius: 50px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap;
+        }
+
+        footer { padding: 3rem 5%; background: var(--dark); color: white; text-align: center; }
+        footer p { color: rgba(255,255,255,0.7); }
+
+        /* Health Score Gauge */
+        .gauge-container { display: flex; justify-content: center; margin: 2rem 0; }
+        .gauge { position: relative; width: 220px; height: 110px; overflow: hidden; }
+        .gauge-bg { position: absolute; width: 220px; height: 110px; border-radius: 110px 110px 0 0; background: conic-gradient(from 0.75turn, var(--red) 0%, var(--amber) 25%, var(--green) 50%); clip-path: inset(0 0 50% 0); }
+        .gauge-cover { position: absolute; width: 180px; height: 90px; border-radius: 90px 90px 0 0; background: white; top: 20px; left: 20px; }
+        .gauge-score { position: absolute; bottom: 0; width: 100%; text-align: center; font-family: 'Darker Grotesque', sans-serif; font-size: 3.5rem; font-weight: 900; line-height: 1; }
+        .gauge-label { text-align: center; font-size: 1rem; font-weight: 600; margin-top: 0.5rem; }
+
+        /* Checklist Styles */
+        .checklist-section { margin-bottom: 1.5rem; }
+        .checklist-section h4 { font-size: 1rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+        .check-item { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #F1F5F9; }
+        .check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px; }
+        .check-icon.required { background: var(--red); color: white; }
+        .check-icon.recommended { background: var(--amber); color: white; }
+        .check-icon.optional { background: #CBD5E1; color: white; }
+        .check-text { font-size: 0.9rem; }
+        .check-text .check-name { font-weight: 600; display: block; }
+        .check-text .check-detail { color: #64748B; font-size: 0.8rem; }
+        .permit-timeline { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.3rem; font-size: 0.78rem; color: var(--purple); font-weight: 600; }
+
+        /* Vetting Score Ring */
+        .score-ring-container { display: flex; justify-content: center; margin: 2rem 0; }
+        .score-ring { position: relative; width: 180px; height: 180px; }
+        .score-ring svg { transform: rotate(-90deg); }
+        .score-ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .score-ring-text .score-num { font-family: 'Darker Grotesque', sans-serif; font-size: 3rem; font-weight: 900; line-height: 1; }
+        .score-ring-text .score-lbl { font-size: 0.8rem; color: #64748B; }
+
+        .vet-category { margin-bottom: 1rem; }
+        .vet-category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .vet-category-name { font-weight: 600; font-size: 0.9rem; }
+        .vet-category-score { font-weight: 700; font-size: 0.9rem; }
+        .vet-bar { height: 8px; background: #F1F5F9; border-radius: 4px; overflow: hidden; }
+        .vet-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr; }
+            .line-item-row { grid-template-columns: 1fr 80px 30px; }
+            .lead-capture form { flex-direction: column; }
+            .nav-links { display: none; }
+            .tool-nav { gap: 0.5rem; }
+            .tool-nav-btn { font-size: 0.8rem; padding: 0.6rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="logo">BuildSynq</a>
+    <nav class="nav-links">
+        <a href="/#solutions">Solutions</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/tools.html">Tools</a>
+        <a href="https://calendly.com/rob-buildsynq/30min" class="cta-button">Get Started</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Free Construction Tools</h1>
+    <p>Smart calculators built for homeowners and contractors to make better project decisions</p>
+</section>
+
+<div class="tool-nav">
+    <button class="tool-nav-btn active" onclick="showTool('bid')">&#128200; Bid Comparison</button>
+    <button class="tool-nav-btn" onclick="showTool('change')">&#128221; Change Order Impact</button>
+    <button class="tool-nav-btn" onclick="showTool('timeline')">&#128176; Payment Timeline</button>
+    <button class="tool-nav-btn" onclick="showTool('estimator')">&#127968; Cost Estimator</button>
+    <button class="tool-nav-btn" onclick="showTool('payment')">&#128178; Payment Calculator</button>
+    <button class="tool-nav-btn" onclick="showTool('blockchain')">&#128279; Blockchain Savings</button>
+    <button class="tool-nav-btn" onclick="showTool('health')">&#128154; Project Health</button>
+    <button class="tool-nav-btn" onclick="showTool('permits')">&#128203; Permit Checklist</button>
+    <button class="tool-nav-btn" onclick="showTool('vetting')">&#128101; Contractor Vetting</button>
+</div>
+
+<!-- ===================== BID COMPARISON TOOL ===================== -->
+<section class="tool-section active" id="tool-bid">
+    <h2>Contractor Bid Comparison</h2>
+    <p class="subtitle">Compare up to 3 contractor bids side-by-side. We'll flag missing items, lowball pricing, and help you pick the best value.</p>
+
+    <div id="bids-container">
+        <div class="bid-entry" data-bid="1">
+            <h3><span class="bid-number">1</span> Contractor Bid</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Contractor Name</label>
+                    <input type="text" class="bid-name" placeholder="e.g. Smith Construction">
+                </div>
+                <div class="form-group">
+                    <label>Total Bid Amount ($)</label>
+                    <input type="number" class="bid-total" placeholder="e.g. 45000">
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Timeline (weeks)</label>
+                    <input type="number" class="bid-weeks" placeholder="e.g. 8">
+                </div>
+                <div class="form-group">
+                    <label>Warranty (months)</label>
+                    <input type="number" class="bid-warranty" placeholder="e.g. 12">
+                </div>
+            </div>
+            <div class="line-items">
+                <label style="font-weight:600;font-size:0.9rem;color:#475569;margin-bottom:0.5rem;display:block;">Line Items (optional but recommended)</label>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description (e.g. Demolition)">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description (e.g. Materials)">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description (e.g. Labor)">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            </div>
+            <button class="add-line-btn" onclick="addLineItem(this)">+ Add Line Item</button>
+        </div>
+
+        <div class="bid-entry" data-bid="2">
+            <h3><span class="bid-number">2</span> Contractor Bid</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Contractor Name</label>
+                    <input type="text" class="bid-name" placeholder="e.g. Johnson Builders">
+                </div>
+                <div class="form-group">
+                    <label>Total Bid Amount ($)</label>
+                    <input type="number" class="bid-total" placeholder="e.g. 38000">
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Timeline (weeks)</label>
+                    <input type="number" class="bid-weeks" placeholder="e.g. 6">
+                </div>
+                <div class="form-group">
+                    <label>Warranty (months)</label>
+                    <input type="number" class="bid-warranty" placeholder="e.g. 6">
+                </div>
+            </div>
+            <div class="line-items">
+                <label style="font-weight:600;font-size:0.9rem;color:#475569;margin-bottom:0.5rem;display:block;">Line Items (optional but recommended)</label>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            </div>
+            <button class="add-line-btn" onclick="addLineItem(this)">+ Add Line Item</button>
+        </div>
+
+        <div class="bid-entry" data-bid="3">
+            <h3><span class="bid-number">3</span> Contractor Bid <span style="color:#94A3B8;font-weight:400;font-size:0.9rem">(optional)</span></h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Contractor Name</label>
+                    <input type="text" class="bid-name" placeholder="e.g. Premier Remodeling">
+                </div>
+                <div class="form-group">
+                    <label>Total Bid Amount ($)</label>
+                    <input type="number" class="bid-total" placeholder="e.g. 52000">
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Timeline (weeks)</label>
+                    <input type="number" class="bid-weeks" placeholder="e.g. 10">
+                </div>
+                <div class="form-group">
+                    <label>Warranty (months)</label>
+                    <input type="number" class="bid-warranty" placeholder="e.g. 24">
+                </div>
+            </div>
+            <div class="line-items">
+                <label style="font-weight:600;font-size:0.9rem;color:#475569;margin-bottom:0.5rem;display:block;">Line Items (optional but recommended)</label>
+                <div class="line-item-row">
+                    <input type="text" class="li-desc" placeholder="Description">
+                    <input type="number" class="li-cost" placeholder="Cost">
+                    <button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            </div>
+            <button class="add-line-btn" onclick="addLineItem(this)">+ Add Line Item</button>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="compareBids()">Compare Bids</button>
+
+    <div class="results-area" id="bid-results"></div>
+
+    <div class="tool-cta">
+        <h3>Get Automated Bid Tracking</h3>
+        <p>BuildSynq tracks bids, milestones, and payments in one place. Never lose track of contractor details again.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== CHANGE ORDER IMPACT ===================== -->
+<section class="tool-section" id="tool-change">
+    <h2>Change Order Impact Calculator</h2>
+    <p class="subtitle">See exactly how a change order affects your budget, timeline, and remaining milestones before you approve it.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Original Contract Value ($)</label>
+            <input type="number" id="co-contract" value="45000" placeholder="e.g. 45000">
+        </div>
+        <div class="form-group">
+            <label>Change Order Amount ($)</label>
+            <input type="number" id="co-amount" value="6500" placeholder="e.g. 6500">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Original Project Duration (weeks)</label>
+            <input type="number" id="co-duration" value="8" placeholder="e.g. 8">
+        </div>
+        <div class="form-group">
+            <label>Estimated Delay from Change (weeks)</label>
+            <input type="number" id="co-delay" value="2" placeholder="e.g. 2">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Number of Milestones</label>
+            <input type="number" id="co-milestones" value="5" placeholder="e.g. 5">
+        </div>
+        <div class="form-group">
+            <label>Milestones Already Completed</label>
+            <input type="number" id="co-completed" value="2" placeholder="e.g. 2">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Amount Already Paid ($)</label>
+            <input type="number" id="co-paid" value="18000" placeholder="e.g. 18000">
+        </div>
+        <div class="form-group">
+            <label>Change Order Type</label>
+            <select id="co-type">
+                <option value="owner">Owner-Requested Change</option>
+                <option value="unforeseen">Unforeseen Condition</option>
+                <option value="error">Design Error / Omission</option>
+                <option value="code">Code Compliance</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcChangeOrder()">Calculate Impact</button>
+
+    <div class="results-area" id="change-results"></div>
+
+    <div class="tool-cta">
+        <h3>Manage Change Orders Automatically</h3>
+        <p>BuildSynq tracks every change order on the blockchain. No more disputes about what was agreed to.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== PAYMENT TIMELINE ===================== -->
+<section class="tool-section" id="tool-timeline">
+    <h2>Payment Timeline Simulator</h2>
+    <p class="subtitle">See how BuildSynq's milestone payments compare to traditional net-30 invoicing. Visualize contractor cash flow impact.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Total Project Value ($)</label>
+            <input type="number" id="pt-value" value="45000" placeholder="e.g. 45000">
+        </div>
+        <div class="form-group">
+            <label>Project Duration (weeks)</label>
+            <input type="number" id="pt-weeks" value="8" placeholder="e.g. 8">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Number of Milestones</label>
+            <input type="number" id="pt-milestones" value="5" placeholder="e.g. 5">
+        </div>
+        <div class="form-group">
+            <label>Traditional Payment Terms</label>
+            <select id="pt-terms">
+                <option value="30">Net 30 (industry standard)</option>
+                <option value="45">Net 45</option>
+                <option value="60">Net 60</option>
+                <option value="90">Net 90</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Material Costs (% of project)</label>
+            <input type="number" id="pt-materials" value="40" placeholder="e.g. 40">
+            <span class="input-hint">Contractors typically front 30-50% for materials</span>
+        </div>
+        <div class="form-group">
+            <label>Contractor Monthly Overhead ($)</label>
+            <input type="number" id="pt-overhead" value="8000" placeholder="e.g. 8000">
+            <span class="input-hint">Rent, insurance, crew wages, truck payments</span>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcTimeline()">Simulate Payment Timeline</button>
+
+    <div class="results-area" id="timeline-results"></div>
+
+    <div class="tool-cta">
+        <h3>Get Paid in 48 Hours, Not 30 Days</h3>
+        <p>BuildSynq releases milestone payments instantly when work is approved. No more chasing invoices.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== COST ESTIMATOR (existing) ===================== -->
+<section class="tool-section" id="tool-estimator">
+    <h2>Home Renovation Cost Estimator</h2>
+    <p class="subtitle">Get a ballpark estimate for your renovation based on Midwest market rates.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Project Type</label>
+            <select id="est-type">
+                <option value="kitchen">Kitchen Remodel</option>
+                <option value="bathroom">Bathroom Remodel</option>
+                <option value="basement">Basement Finish</option>
+                <option value="addition">Home Addition</option>
+                <option value="deck">Deck / Patio</option>
+                <option value="roof">Roof Replacement</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Square Footage</label>
+            <input type="number" id="est-sqft" value="200" placeholder="e.g. 200">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Quality Level</label>
+            <select id="est-quality">
+                <option value="budget">Budget</option>
+                <option value="mid" selected>Mid-Range</option>
+                <option value="high">High-End</option>
+                <option value="luxury">Luxury</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <select id="est-location">
+                <option value="midwest" selected>Midwest (MI, OH, IN, IL)</option>
+                <option value="south">South (TX, FL, GA)</option>
+                <option value="northeast">Northeast (NY, NJ, MA)</option>
+                <option value="west">West Coast (CA, WA, OR)</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcEstimate()">Get Estimate</button>
+
+    <div class="results-area" id="estimate-results"></div>
+
+    <div class="tool-cta">
+        <h3>Turn Estimates Into Real Projects</h3>
+        <p>BuildSynq converts your estimate into milestones, schedules, and automated payments instantly.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== PAYMENT CALC (existing) ===================== -->
+<section class="tool-section" id="tool-payment">
+    <h2>Payment Savings Calculator</h2>
+    <p class="subtitle">See how much time and money you save by automating construction payments.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Projects per Year</label>
+            <input type="number" id="ps-projects" value="12">
+        </div>
+        <div class="form-group">
+            <label>Payments per Project</label>
+            <input type="number" id="ps-payments" value="10">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Hours per Payment (processing)</label>
+            <input type="number" id="ps-hours" value="8">
+        </div>
+        <div class="form-group">
+            <label>Hourly Admin Rate ($)</label>
+            <input type="number" id="ps-rate" value="75">
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcPaymentSavings()">Calculate Savings</button>
+
+    <div class="results-area" id="payment-results"></div>
+
+    <div class="tool-cta">
+        <h3>Automate Your Payment Workflow</h3>
+        <p>Stop spending hours on payment processing. BuildSynq handles it automatically.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== BLOCKCHAIN (existing) ===================== -->
+<section class="tool-section" id="tool-blockchain">
+    <h2>Blockchain Savings Calculator</h2>
+    <p class="subtitle">Calculate how much you save with blockchain-verified payments vs traditional processing.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Annual Payment Volume ($)</label>
+            <input type="number" id="bc-volume" value="2000000">
+        </div>
+        <div class="form-group">
+            <label>Number of Transactions / Year</label>
+            <input type="number" id="bc-transactions" value="500">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Current Processing Fee (%)</label>
+            <input type="number" id="bc-fee" value="3" step="0.1">
+        </div>
+        <div class="form-group">
+            <label>Average Dispute Rate (%)</label>
+            <input type="number" id="bc-disputes" value="5" step="0.1">
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcBlockchain()">Calculate Savings</button>
+
+    <div class="results-area" id="blockchain-results"></div>
+
+    <div class="tool-cta">
+        <h3>Blockchain-Verified Payments</h3>
+        <p>Every transaction permanently recorded. Zero disputes. Near-zero fees.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== PROJECT HEALTH SCORE ===================== -->
+<section class="tool-section" id="tool-health">
+    <h2>Project Health Score</h2>
+    <p class="subtitle">Input your project stats and get a red/yellow/green health score with actionable recommendations.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Project Completion (%)</label>
+            <input type="number" id="ph-complete" value="45" min="0" max="100">
+            <span class="input-hint">How much of the total work is done</span>
+        </div>
+        <div class="form-group">
+            <label>Budget Spent (%)</label>
+            <input type="number" id="ph-spent" value="60" min="0" max="200">
+            <span class="input-hint">Percentage of total budget spent so far</span>
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Days Elapsed</label>
+            <input type="number" id="ph-elapsed" value="45">
+        </div>
+        <div class="form-group">
+            <label>Total Project Days</label>
+            <input type="number" id="ph-total" value="90">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Change Orders Filed</label>
+            <input type="number" id="ph-changes" value="2">
+        </div>
+        <div class="form-group">
+            <label>Open Issues / Punch Items</label>
+            <input type="number" id="ph-issues" value="5">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Milestones On Schedule</label>
+            <select id="ph-onschedule">
+                <option value="all">All on schedule</option>
+                <option value="most" selected>Most on schedule (1-2 behind)</option>
+                <option value="some">Some behind (3+ behind)</option>
+                <option value="none">Significantly behind</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Communication Quality</label>
+            <select id="ph-comms">
+                <option value="excellent">Excellent (daily updates)</option>
+                <option value="good" selected>Good (weekly updates)</option>
+                <option value="fair">Fair (sporadic updates)</option>
+                <option value="poor">Poor (have to chase for info)</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcHealthScore()">Get Health Score</button>
+
+    <div class="results-area" id="health-results"></div>
+
+    <div class="tool-cta">
+        <h3>Get Real-Time Project Health Monitoring</h3>
+        <p>BuildSynq's AI tracks your project health automatically and alerts you before problems become expensive.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== PERMIT CHECKLIST GENERATOR ===================== -->
+<section class="tool-section" id="tool-permits">
+    <h2>Permit Checklist Generator</h2>
+    <p class="subtitle">Select your project type and location to get a customized permit checklist with estimated timelines and costs.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Project Type</label>
+            <select id="pm-type">
+                <option value="kitchen">Kitchen Remodel</option>
+                <option value="bathroom">Bathroom Remodel</option>
+                <option value="addition">Home Addition</option>
+                <option value="basement">Basement Finish</option>
+                <option value="deck">Deck / Patio</option>
+                <option value="roof">Roof Replacement</option>
+                <option value="electrical">Electrical Work</option>
+                <option value="plumbing">Plumbing Work</option>
+                <option value="hvac">HVAC Replacement</option>
+                <option value="newbuild">New Construction</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>State</label>
+            <select id="pm-state">
+                <option value="MI" selected>Michigan</option>
+                <option value="OH">Ohio</option>
+                <option value="IN">Indiana</option>
+                <option value="IL">Illinois</option>
+                <option value="TX">Texas</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+                <option value="NY">New York</option>
+                <option value="GA">Georgia</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="other">Other State</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Estimated Project Value ($)</label>
+            <input type="number" id="pm-value" value="25000">
+        </div>
+        <div class="form-group">
+            <label>Property Type</label>
+            <select id="pm-property">
+                <option value="single">Single Family Home</option>
+                <option value="condo">Condo / Townhome</option>
+                <option value="multi">Multi-Family (2-4 units)</option>
+                <option value="commercial">Commercial</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcPermits()">Generate Checklist</button>
+
+    <div class="results-area" id="permit-results"></div>
+
+    <div class="tool-cta">
+        <h3>Automated Permit Tracking</h3>
+        <p>BuildSynq tracks permit status, sends reminders for inspections, and stores approvals on the blockchain.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<!-- ===================== CONTRACTOR VETTING SCORECARD ===================== -->
+<section class="tool-section" id="tool-vetting">
+    <h2>Contractor Vetting Scorecard</h2>
+    <p class="subtitle">Enter contractor details and get a trust score based on licensing, insurance, experience, and reputation.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Contractor Name</label>
+            <input type="text" id="cv-name" placeholder="e.g. Smith Construction">
+        </div>
+        <div class="form-group">
+            <label>Licensed?</label>
+            <select id="cv-license">
+                <option value="yes">Yes — verified state license</option>
+                <option value="local">Yes — local/city license only</option>
+                <option value="expired">License expired</option>
+                <option value="no">No license</option>
+                <option value="unknown">Unknown / didn't check</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>General Liability Insurance?</label>
+            <select id="cv-insurance">
+                <option value="full">Yes — GL + Workers' Comp</option>
+                <option value="gl">Yes — GL only</option>
+                <option value="no">No insurance</option>
+                <option value="unknown">Unknown</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Years in Business</label>
+            <input type="number" id="cv-years" value="5">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Online Reviews (avg stars)</label>
+            <select id="cv-reviews">
+                <option value="5">4.5 — 5.0 stars</option>
+                <option value="4">4.0 — 4.4 stars</option>
+                <option value="3">3.0 — 3.9 stars</option>
+                <option value="2">Below 3.0 stars</option>
+                <option value="0">No online reviews</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Number of Reviews</label>
+            <input type="number" id="cv-numreviews" value="25">
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>References Provided?</label>
+            <select id="cv-references">
+                <option value="3plus">3+ verified references</option>
+                <option value="1to2">1-2 references</option>
+                <option value="offered">Offered but not yet checked</option>
+                <option value="none">None provided</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Written Contract Offered?</label>
+            <select id="cv-contract">
+                <option value="detailed">Yes — detailed scope, milestones, warranty</option>
+                <option value="basic">Yes — basic contract</option>
+                <option value="verbal">Verbal agreement only</option>
+                <option value="none">No contract discussed</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>BBB Accredited?</label>
+            <select id="cv-bbb">
+                <option value="aplus">A+ rating</option>
+                <option value="accredited">Accredited (A-B)</option>
+                <option value="notaccredited">Listed but not accredited</option>
+                <option value="complaints">Has complaints</option>
+                <option value="none">Not listed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Payment Terms Offered</label>
+            <select id="cv-payment">
+                <option value="milestone">Milestone-based payments</option>
+                <option value="progress">Progress payments (monthly)</option>
+                <option value="partial">50% up front, 50% at end</option>
+                <option value="full">100% up front required</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calcVetting()">Generate Scorecard</button>
+
+    <div class="results-area" id="vetting-results"></div>
+
+    <div class="tool-cta">
+        <h3>Verified Contractor Marketplace</h3>
+        <p>BuildSynq's marketplace only features contractors with verified licenses, insurance, and blockchain-proven track records.</p>
+        <a href="https://calendly.com/rob-buildsynq/30min">Start Free</a>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 BuildSynq. Construction management revolutionized.</p>
+</footer>
+
+<script>
+// ===== Tool Navigation =====
+function showTool(id) {
+    document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tool-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tool-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function pct(n) { return Math.round(n * 10) / 10 + '%'; }
+
+// ===== ADD LINE ITEM =====
+function addLineItem(btn) {
+    const row = document.createElement('div');
+    row.className = 'line-item-row';
+    row.innerHTML = '<input type="text" class="li-desc" placeholder="Description"><input type="number" class="li-cost" placeholder="Cost"><button class="remove-btn" onclick="this.parentElement.remove()">&times;</button>';
+    btn.parentElement.querySelector('.line-items').appendChild(row);
+}
+
+// ===== BID COMPARISON =====
+function compareBids() {
+    const entries = document.querySelectorAll('.bid-entry');
+    const bids = [];
+    entries.forEach(entry => {
+        const name = entry.querySelector('.bid-name').value || ('Bid ' + entry.dataset.bid);
+        const total = parseFloat(entry.querySelector('.bid-total').value);
+        const weeks = parseFloat(entry.querySelector('.bid-weeks').value);
+        const warranty = parseFloat(entry.querySelector('.bid-warranty').value);
+        if (!total) return;
+        const lineItems = [];
+        entry.querySelectorAll('.line-item-row').forEach(row => {
+            const desc = row.querySelector('.li-desc').value;
+            const cost = parseFloat(row.querySelector('.li-cost').value);
+            if (desc && cost) lineItems.push({ desc: desc.toLowerCase().trim(), cost });
+        });
+        bids.push({ name, total, weeks, warranty, lineItems });
+    });
+
+    if (bids.length < 2) { alert('Please fill in at least 2 bids to compare.'); return; }
+
+    const avg = bids.reduce((s, b) => s + b.total, 0) / bids.length;
+    const lowest = Math.min(...bids.map(b => b.total));
+    const highest = Math.max(...bids.map(b => b.total));
+    const spread = ((highest - lowest) / avg) * 100;
+
+    // Analyze each bid
+    const allDescs = new Set();
+    bids.forEach(b => b.lineItems.forEach(li => allDescs.add(li.desc)));
+
+    let html = '<div class="stats-row">';
+    bids.forEach(b => {
+        const diff = ((b.total - avg) / avg) * 100;
+        const color = b.total === lowest ? 'green' : b.total === highest ? 'amber' : 'purple';
+        html += `<div class="stat-box"><div class="number" style="color:var(--${color})">${fmt(b.total)}</div><div class="label">${b.name}</div></div>`;
+    });
+    html += '</div>';
+
+    // Flags and analysis
+    html += '<div class="result-card"><h3>&#128269; Analysis & Flags</h3>';
+    bids.forEach(b => {
+        const diff = ((b.total - avg) / avg) * 100;
+        const flags = [];
+
+        if (diff < -15) flags.push({ text: 'Significantly below average (' + Math.round(diff) + '%). May signal cut corners or upcoming change orders.', type: 'warning' });
+        else if (diff < -5) flags.push({ text: 'Below average (' + Math.round(diff) + '%). Verify scope matches other bids.', type: 'info' });
+        else if (diff > 15) flags.push({ text: 'Significantly above average (+' + Math.round(diff) + '%). Ask what premium services justify the cost.', type: 'warning' });
+        else flags.push({ text: 'Within reasonable range of average (' + (diff > 0 ? '+' : '') + Math.round(diff) + '%).', type: 'good' });
+
+        if (b.weeks && bids.filter(x => x.weeks).length > 1) {
+            const avgWeeks = bids.filter(x => x.weeks).reduce((s, x) => s + x.weeks, 0) / bids.filter(x => x.weeks).length;
+            if (b.weeks < avgWeeks * 0.7) flags.push({ text: 'Timeline is ' + Math.round((1 - b.weeks/avgWeeks)*100) + '% faster than average. Ask how they achieve this.', type: 'info' });
+        }
+
+        if (b.warranty && b.warranty < 12) flags.push({ text: 'Warranty is only ' + b.warranty + ' months. Industry standard is 12+ months.', type: 'warning' });
+        else if (b.warranty >= 24) flags.push({ text: b.warranty + '-month warranty shows confidence in workmanship.', type: 'good' });
+
+        // Missing line items
+        if (allDescs.size > 0) {
+            const bidDescs = new Set(b.lineItems.map(li => li.desc));
+            const missing = [...allDescs].filter(d => !bidDescs.has(d));
+            if (missing.length > 0 && b.lineItems.length > 0) {
+                flags.push({ text: 'Missing line items that other bids include: ' + missing.join(', '), type: 'warning' });
+            }
+        }
+
+        html += `<div style="margin-bottom:1.2rem;"><strong style="font-size:1rem;">${b.name}</strong>`;
+        flags.forEach(f => { html += `<div style="margin:0.4rem 0;"><span class="flag ${f.type}">${f.type === 'warning' ? '&#9888;' : f.type === 'good' ? '&#9989;' : '&#8505;&#65039;'} ${f.type.toUpperCase()}</span> <span style="font-size:0.9rem;color:#475569;"> ${f.text}</span></div>`; });
+        html += '</div>';
+    });
+    html += '</div>';
+
+    // Comparison table
+    if (allDescs.size > 0) {
+        html += '<div class="result-card"><h3>&#128203; Line Item Comparison</h3><table class="comparison-table"><thead><tr><th>Item</th>';
+        bids.forEach(b => { html += '<th>' + b.name + '</th>'; });
+        html += '</tr></thead><tbody>';
+        allDescs.forEach(desc => {
+            html += '<tr><td style="text-transform:capitalize">' + desc + '</td>';
+            bids.forEach(b => {
+                const item = b.lineItems.find(li => li.desc === desc);
+                html += '<td>' + (item ? fmt(item.cost) : '<span style="color:var(--red)">Not listed</span>') + '</td>';
+            });
+            html += '</tr>';
+        });
+        html += '<tr style="font-weight:700;border-top:2px solid #E2E8F0"><td>Line Item Total</td>';
+        bids.forEach(b => {
+            const liTotal = b.lineItems.reduce((s, li) => s + li.cost, 0);
+            html += '<td>' + (liTotal > 0 ? fmt(liTotal) + (Math.abs(liTotal - b.total) > 100 ? ' <span class="flag warning">&#9888; Doesn\'t match bid total</span>' : '') : '—') + '</td>';
+        });
+        html += '</tr><tr style="font-weight:700"><td>Bid Total</td>';
+        bids.forEach(b => { html += '<td>' + fmt(b.total) + '</td>'; });
+        html += '</tr></tbody></table></div>';
+    }
+
+    // Summary
+    html += '<div class="result-card"><h3>&#127942; Summary</h3>';
+    html += '<div class="result-row"><span class="result-label">Average Bid</span><span class="result-value">' + fmt(avg) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Bid Spread</span><span class="result-value ' + (spread > 30 ? 'red' : spread > 15 ? 'amber' : 'green') + '">' + pct(spread) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Spread Health</span><span class="result-value ' + (spread > 30 ? 'red' : spread > 15 ? 'amber' : 'green') + '">' + (spread > 30 ? 'High — bids may not be apples-to-apples' : spread > 15 ? 'Moderate — review scope differences' : 'Healthy — bids are reasonably aligned') + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get a detailed PDF comparison report emailed to you</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Send Report</button></form></div>';
+
+    const el = document.getElementById('bid-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== CHANGE ORDER IMPACT =====
+function calcChangeOrder() {
+    const contract = parseFloat(document.getElementById('co-contract').value);
+    const amount = parseFloat(document.getElementById('co-amount').value);
+    const duration = parseFloat(document.getElementById('co-duration').value);
+    const delay = parseFloat(document.getElementById('co-delay').value);
+    const milestones = parseInt(document.getElementById('co-milestones').value);
+    const completed = parseInt(document.getElementById('co-completed').value);
+    const paid = parseFloat(document.getElementById('co-paid').value);
+    const type = document.getElementById('co-type').value;
+
+    const newTotal = contract + amount;
+    const increase = (amount / contract) * 100;
+    const newDuration = duration + delay;
+    const timeIncrease = (delay / duration) * 100;
+    const remaining = milestones - completed;
+    const remainingBudget = newTotal - paid;
+    const newMilestoneAvg = remaining > 0 ? remainingBudget / remaining : 0;
+    const origMilestoneAvg = milestones > 0 ? contract / milestones : 0;
+    const milestoneIncrease = origMilestoneAvg > 0 ? ((newMilestoneAvg - origMilestoneAvg) / origMilestoneAvg) * 100 : 0;
+
+    const weeklyRate = contract / duration;
+    const delayCost = weeklyRate * delay * 0.15; // indirect costs of delay
+
+    const typeAdvice = {
+        owner: "As an owner-requested change, you are responsible for this cost. Negotiate the price but expect to pay.",
+        unforeseen: "Unforeseen conditions are typically shared cost. Review your contract's unforeseen conditions clause.",
+        error: "Design errors are typically the designer's responsibility. Review your design contract for liability.",
+        code: "Code compliance changes are usually unavoidable. Document everything for potential insurance claims."
+    };
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--red)">' + fmt(amount) + '</div><div class="label">Change Order Cost</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--amber)">+' + pct(increase) + '</div><div class="label">Budget Increase</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">+' + delay + ' wk</div><div class="label">Schedule Impact</div></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128200; Budget Impact</h3>';
+    html += '<div class="result-row"><span class="result-label">Original Contract</span><span class="result-value">' + fmt(contract) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Change Order</span><span class="result-value red">+ ' + fmt(amount) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">New Contract Total</span><span class="result-value" style="font-size:1.15rem">' + fmt(newTotal) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Already Paid</span><span class="result-value">' + fmt(paid) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Remaining Balance</span><span class="result-value purple">' + fmt(remainingBudget) + '</span></div>';
+    if (delayCost > 0) html += '<div class="result-row"><span class="result-label">Est. Indirect Delay Costs</span><span class="result-value amber">' + fmt(delayCost) + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128197; Schedule Impact</h3>';
+    html += '<div class="result-row"><span class="result-label">Original Duration</span><span class="result-value">' + duration + ' weeks</span></div>';
+    html += '<div class="result-row"><span class="result-label">Delay Added</span><span class="result-value red">+ ' + delay + ' weeks</span></div>';
+    html += '<div class="result-row"><span class="result-label">New Duration</span><span class="result-value">' + newDuration + ' weeks</span></div>';
+    html += '<div class="result-row"><span class="result-label">Schedule Increase</span><span class="result-value amber">+' + pct(timeIncrease) + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#127919; Milestone Impact</h3>';
+    html += '<div class="result-row"><span class="result-label">Milestones Completed</span><span class="result-value green">' + completed + ' of ' + milestones + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Remaining Milestones</span><span class="result-value">' + remaining + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Original Avg Payment / Milestone</span><span class="result-value">' + fmt(origMilestoneAvg) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">New Avg Payment / Milestone</span><span class="result-value ' + (milestoneIncrease > 20 ? 'red' : 'amber') + '">' + fmt(newMilestoneAvg) + ' (+' + pct(milestoneIncrease) + ')</span></div>';
+    html += '</div>';
+
+    html += '<div class="result-card" style="border-left:4px solid var(--purple)"><h3>&#128161; Advice</h3>';
+    html += '<p style="color:#475569;line-height:1.7">' + typeAdvice[type] + '</p>';
+    if (increase > 10) html += '<p style="color:#C2410C;margin-top:0.8rem;font-weight:600">&#9888; This change order is over 10% of the original contract. Consider getting a second opinion on pricing.</p>';
+    if (delay > duration * 0.25) html += '<p style="color:#C2410C;margin-top:0.5rem;font-weight:600">&#9888; The delay adds more than 25% to your timeline. Discuss acceleration options with your contractor.</p>';
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get the full change order analysis as a PDF</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Send Report</button></form></div>';
+
+    const el = document.getElementById('change-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== PAYMENT TIMELINE =====
+function calcTimeline() {
+    const value = parseFloat(document.getElementById('pt-value').value);
+    const weeks = parseFloat(document.getElementById('pt-weeks').value);
+    const numMilestones = parseInt(document.getElementById('pt-milestones').value);
+    const terms = parseInt(document.getElementById('pt-terms').value);
+    const materialsPct = parseFloat(document.getElementById('pt-materials').value) / 100;
+    const overhead = parseFloat(document.getElementById('pt-overhead').value);
+
+    const milestoneAmt = value / numMilestones;
+    const weeksPerMilestone = weeks / numMilestones;
+    const materialCost = value * materialsPct;
+    const termWeeks = terms / 7;
+
+    // Traditional: contractor submits invoice at each milestone, gets paid net-30/45/60/90
+    const traditional = [];
+    let tradCash = 0;
+    let tradMinCash = 0;
+    for (let w = 0; w <= weeks + termWeeks + 4; w++) {
+        const milestonesDone = Math.min(Math.floor(w / weeksPerMilestone), numMilestones);
+        const materialSpent = Math.min(w / weeks, 1) * materialCost;
+        const overheadSpent = (w / 4) * overhead;
+        const spent = materialSpent + overheadSpent;
+
+        // Payments received (milestone done + wait for terms)
+        let received = 0;
+        for (let m = 1; m <= numMilestones; m++) {
+            const completedAt = m * weeksPerMilestone;
+            const paidAt = completedAt + termWeeks;
+            if (w >= paidAt) received += milestoneAmt;
+        }
+        tradCash = received - spent;
+        if (tradCash < tradMinCash) tradMinCash = tradCash;
+        traditional.push({ week: w, cash: tradCash, received, spent });
+    }
+
+    // BuildSynq: milestone approved, paid within 48 hours
+    const buildsynq = [];
+    let bsCash = 0;
+    let bsMinCash = 0;
+    for (let w = 0; w <= weeks + 2; w++) {
+        const materialSpent = Math.min(w / weeks, 1) * materialCost;
+        const overheadSpent = (w / 4) * overhead;
+        const spent = materialSpent + overheadSpent;
+
+        let received = 0;
+        for (let m = 1; m <= numMilestones; m++) {
+            const completedAt = m * weeksPerMilestone;
+            const paidAt = completedAt + 0.3; // 48 hours ≈ 0.3 weeks
+            if (w >= paidAt) received += milestoneAmt;
+        }
+        bsCash = received - spent;
+        if (bsCash < bsMinCash) bsMinCash = bsCash;
+        buildsynq.push({ week: w, cash: bsCash, received, spent });
+    }
+
+    const cashFlowSaved = Math.abs(tradMinCash) - Math.abs(bsMinCash);
+    const daysWaiting = numMilestones * terms;
+    const daysSaved = daysWaiting - (numMilestones * 2);
+    const interestSaved = Math.abs(tradMinCash) * 0.08 * (terms / 365); // cost of capital
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--green)">' + fmt(cashFlowSaved) + '</div><div class="label">Cash Flow Improvement</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">' + daysSaved + ' days</div><div class="label">Faster Payment</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--red)">' + fmt(Math.abs(tradMinCash)) + '</div><div class="label">Max Cash Gap (Traditional)</div></div>';
+    html += '</div>';
+
+    // Visual timeline comparison
+    html += '<div class="result-card"><h3>&#128197; Payment Receipt Timeline</h3>';
+    html += '<p style="font-size:0.85rem;color:#64748B;margin-bottom:1.5rem;">When the contractor actually receives money after completing each milestone:</p>';
+
+    for (let m = 1; m <= numMilestones; m++) {
+        const completedWeek = Math.round(m * weeksPerMilestone);
+        const tradPaidWeek = completedWeek + Math.round(termWeeks);
+        const bsPaidWeek = completedWeek;
+        const maxWeek = Math.max(tradPaidWeek, weeks + Math.round(termWeeks));
+
+        html += '<div style="margin-bottom:1.5rem;">';
+        html += '<div style="font-weight:600;font-size:0.9rem;margin-bottom:0.5rem;">Milestone ' + m + ': ' + fmt(milestoneAmt) + ' <span style="color:#94A3B8;font-weight:400">— completed week ' + completedWeek + '</span></div>';
+
+        // BuildSynq bar
+        const bsPct = Math.max(5, (bsPaidWeek / maxWeek) * 100);
+        html += '<div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.3rem;"><span style="width:90px;font-size:0.8rem;color:#64748B;">BuildSynq</span>';
+        html += '<div class="timeline-bar" style="flex:1;height:32px;"><div class="timeline-fill" style="width:' + bsPct + '%;background:linear-gradient(90deg,var(--purple),var(--purple-dark));">Week ' + bsPaidWeek + '</div></div></div>';
+
+        // Traditional bar
+        const tradPct = Math.max(5, (tradPaidWeek / maxWeek) * 100);
+        html += '<div style="display:flex;align-items:center;gap:0.8rem;"><span style="width:90px;font-size:0.8rem;color:#64748B;">Net ' + terms + '</span>';
+        html += '<div class="timeline-bar" style="flex:1;height:32px;"><div class="timeline-fill" style="width:' + tradPct + '%;background:linear-gradient(90deg,#94A3B8,#64748B);">Week ' + tradPaidWeek + '</div></div></div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    // Cash flow comparison
+    html += '<div class="result-card"><h3>&#128176; Contractor Cash Position</h3>';
+    html += '<div class="result-row"><span class="result-label">Worst Cash Position (Traditional)</span><span class="result-value red">' + fmt(tradMinCash) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Worst Cash Position (BuildSynq)</span><span class="result-value ' + (bsMinCash < 0 ? 'amber' : 'green') + '">' + fmt(bsMinCash) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Cash Flow Improvement</span><span class="result-value green">' + fmt(cashFlowSaved) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Est. Cost of Capital Saved</span><span class="result-value green">' + fmt(interestSaved) + '/project</span></div>';
+    html += '</div>';
+
+    html += '<div class="result-card" style="border-left:4px solid var(--green)"><h3>&#128161; What This Means</h3>';
+    html += '<p style="color:#475569;line-height:1.7">With traditional Net ' + terms + ' terms, the contractor has to float <strong>' + fmt(Math.abs(tradMinCash)) + '</strong> out of pocket — covering materials, labor, and overhead while waiting to get paid. ';
+    html += 'That means credit lines, loans, or turning down new work.</p>';
+    html += '<p style="color:#475569;line-height:1.7;margin-top:0.8rem">With BuildSynq milestone payments, payments arrive within 48 hours of approval. The contractor\'s worst cash gap drops to <strong>' + fmt(Math.abs(bsMinCash)) + '</strong> — a <strong>' + fmt(cashFlowSaved) + ' improvement</strong>.</p>';
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get the full cash flow analysis as a PDF</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Send Report</button></form></div>';
+
+    const el = document.getElementById('timeline-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== COST ESTIMATOR =====
+function calcEstimate() {
+    const type = document.getElementById('est-type').value;
+    const sqft = parseFloat(document.getElementById('est-sqft').value);
+    const quality = document.getElementById('est-quality').value;
+    const location = document.getElementById('est-location').value;
+
+    const rates = {
+        kitchen: { budget: 80, mid: 150, high: 250, luxury: 400 },
+        bathroom: { budget: 100, mid: 200, high: 350, luxury: 500 },
+        basement: { budget: 40, mid: 75, high: 130, luxury: 200 },
+        addition: { budget: 120, mid: 200, high: 350, luxury: 550 },
+        deck: { budget: 25, mid: 45, high: 75, luxury: 120 },
+        roof: { budget: 5, mid: 8, high: 12, luxury: 20 }
+    };
+
+    const locationMult = { midwest: 1.0, south: 0.95, northeast: 1.35, west: 1.45 };
+    const typeNames = { kitchen: 'Kitchen Remodel', bathroom: 'Bathroom Remodel', basement: 'Basement Finish', addition: 'Home Addition', deck: 'Deck / Patio', roof: 'Roof Replacement' };
+    const qualNames = { budget: 'Budget', mid: 'Mid-Range', high: 'High-End', luxury: 'Luxury' };
+
+    const rate = rates[type][quality];
+    const mult = locationMult[location];
+    const base = sqft * rate * mult;
+    const low = base * 0.85;
+    const high = base * 1.15;
+
+    const materials = base * 0.45;
+    const labor = base * 0.35;
+    const overhead = base * 0.12;
+    const permits = base * 0.03;
+    const contingency = base * 0.05;
+
+    const milestones = type === 'roof' || type === 'deck' ? 3 : type === 'kitchen' || type === 'bathroom' ? 4 : 5;
+    const weeksDuration = type === 'roof' ? 2 : type === 'deck' ? 3 : type === 'bathroom' ? 4 : type === 'kitchen' ? 6 : 10;
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">' + fmt(base) + '</div><div class="label">Estimated Cost</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--green)">' + fmt(low) + '</div><div class="label">Low Range</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--amber)">' + fmt(high) + '</div><div class="label">High Range</div></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128200; ' + qualNames[quality] + ' ' + typeNames[type] + ' — ' + sqft + ' sq ft</h3>';
+    html += '<div class="result-row"><span class="result-label">Materials</span><span class="result-value">' + fmt(materials) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Labor</span><span class="result-value">' + fmt(labor) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Overhead & Profit</span><span class="result-value">' + fmt(overhead) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Permits</span><span class="result-value">' + fmt(permits) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Contingency (5%)</span><span class="result-value">' + fmt(contingency) + '</span></div>';
+    html += '<div class="result-row" style="font-weight:700;border-top:2px solid #E2E8F0"><span class="result-label" style="font-weight:700">Total Estimate</span><span class="result-value purple" style="font-size:1.2rem">' + fmt(base) + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128197; Suggested Milestone Breakdown</h3>';
+    const milestoneNames = {
+        kitchen: ['Demo & Prep', 'Rough-In (Plumbing/Electric)', 'Cabinets & Countertops', 'Tile & Finish'],
+        bathroom: ['Demo & Prep', 'Plumbing Rough-In', 'Tile & Fixtures', 'Final Punch List'],
+        basement: ['Framing & HVAC', 'Electrical & Plumbing', 'Drywall & Paint', 'Flooring & Trim', 'Final Finish'],
+        addition: ['Foundation & Framing', 'Rough-In MEP', 'Insulation & Drywall', 'Interior Finish', 'Final Punch List'],
+        deck: ['Materials & Layout', 'Structure', 'Decking & Finish'],
+        roof: ['Tear-Off & Prep', 'Installation', 'Cleanup & Inspection']
+    };
+    const names = milestoneNames[type];
+    const milestoneAmt = base / milestones;
+    names.forEach((name, i) => {
+        html += '<div class="result-row"><span class="result-label">' + (i + 1) + '. ' + name + '</span><span class="result-value purple">' + fmt(milestoneAmt) + '</span></div>';
+    });
+    html += '<div class="result-row"><span class="result-label">Estimated Duration</span><span class="result-value">' + weeksDuration + ' weeks</span></div>';
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get the full estimate with a recommended contractor match</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Get Full Estimate</button></form></div>';
+
+    const el = document.getElementById('estimate-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== PAYMENT SAVINGS =====
+function calcPaymentSavings() {
+    const projects = parseFloat(document.getElementById('ps-projects').value);
+    const payments = parseFloat(document.getElementById('ps-payments').value);
+    const hours = parseFloat(document.getElementById('ps-hours').value);
+    const rate = parseFloat(document.getElementById('ps-rate').value);
+
+    const totalHours = projects * payments * hours;
+    const currentCost = totalHours * rate;
+    const bsCost = currentCost * 0.15;
+    const saved = currentCost - bsCost;
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--red)">' + fmt(currentCost) + '</div><div class="label">Current Annual Cost</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">' + fmt(bsCost) + '</div><div class="label">With BuildSynq</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--green)">' + fmt(saved) + '</div><div class="label">Annual Savings</div></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128200; Breakdown</h3>';
+    html += '<div class="result-row"><span class="result-label">Total Payments / Year</span><span class="result-value">' + (projects * payments) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Hours Spent Processing</span><span class="result-value">' + totalHours.toLocaleString() + ' hrs</span></div>';
+    html += '<div class="result-row"><span class="result-label">Hours with BuildSynq</span><span class="result-value green">' + Math.round(totalHours * 0.15).toLocaleString() + ' hrs</span></div>';
+    html += '<div class="result-row"><span class="result-label">Time Saved</span><span class="result-value green">' + Math.round(totalHours * 0.85).toLocaleString() + ' hrs / year</span></div>';
+    html += '</div>';
+
+    const el = document.getElementById('payment-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== BLOCKCHAIN SAVINGS =====
+function calcBlockchain() {
+    const volume = parseFloat(document.getElementById('bc-volume').value);
+    const transactions = parseFloat(document.getElementById('bc-transactions').value);
+    const fee = parseFloat(document.getElementById('bc-fee').value) / 100;
+    const disputes = parseFloat(document.getElementById('bc-disputes').value) / 100;
+
+    const currentFees = volume * fee;
+    const bsFees = volume * 0.01; // ~1% with USDC
+    const feeSaved = currentFees - bsFees;
+    const disputeCost = volume * disputes * 0.03; // avg 3% of disputed amount
+    const totalSaved = feeSaved + disputeCost;
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--green)">' + fmt(totalSaved) + '</div><div class="label">Total Annual Savings</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">' + fmt(feeSaved) + '</div><div class="label">Processing Fee Savings</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--amber)">' + fmt(disputeCost) + '</div><div class="label">Dispute Costs Eliminated</div></div>';
+    html += '</div>';
+
+    html += '<div class="result-card"><h3>&#128200; Fee Comparison</h3>';
+    html += '<div class="result-row"><span class="result-label">Current Processing Fees</span><span class="result-value red">' + fmt(currentFees) + '/yr</span></div>';
+    html += '<div class="result-row"><span class="result-label">BuildSynq USDC Fees</span><span class="result-value green">' + fmt(bsFees) + '/yr</span></div>';
+    html += '<div class="result-row"><span class="result-label">Cost per Transaction (Current)</span><span class="result-value">' + fmt(currentFees / transactions) + '</span></div>';
+    html += '<div class="result-row"><span class="result-label">Cost per Transaction (BuildSynq)</span><span class="result-value green">' + fmt(bsFees / transactions) + '</span></div>';
+    html += '</div>';
+
+    const el = document.getElementById('blockchain-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== EMAIL CAPTURE =====
+function captureEmail(form) {
+    const email = form.querySelector('input[type="email"]').value;
+    form.innerHTML = '<p style="color:var(--green);font-weight:600;">&#9989; Report will be sent to ' + email + '</p>';
+    return false;
+}
+
+// ===== PROJECT HEALTH SCORE =====
+function calcHealthScore() {
+    const complete = parseFloat(document.getElementById('ph-complete').value);
+    const spent = parseFloat(document.getElementById('ph-spent').value);
+    const elapsed = parseFloat(document.getElementById('ph-elapsed').value);
+    const total = parseFloat(document.getElementById('ph-total').value);
+    const changes = parseInt(document.getElementById('ph-changes').value);
+    const issues = parseInt(document.getElementById('ph-issues').value);
+    const onSchedule = document.getElementById('ph-onschedule').value;
+    const comms = document.getElementById('ph-comms').value;
+
+    const timeElapsedPct = (elapsed / total) * 100;
+
+    // Budget health: compare % spent vs % complete (ideal: equal)
+    const budgetRatio = spent / Math.max(complete, 1);
+    let budgetScore = budgetRatio <= 1 ? 100 : budgetRatio <= 1.15 ? 80 : budgetRatio <= 1.3 ? 60 : budgetRatio <= 1.5 ? 35 : 15;
+
+    // Schedule health: compare % complete vs % time elapsed
+    const scheduleRatio = complete / Math.max(timeElapsedPct, 1);
+    let scheduleScore = scheduleRatio >= 1 ? 100 : scheduleRatio >= 0.85 ? 80 : scheduleRatio >= 0.7 ? 55 : scheduleRatio >= 0.5 ? 30 : 10;
+
+    // Milestone score
+    const milestoneScores = { all: 100, most: 70, some: 40, none: 10 };
+    let milestoneScore = milestoneScores[onSchedule];
+
+    // Communication score
+    const commScores = { excellent: 100, good: 75, fair: 40, poor: 10 };
+    let commScore = commScores[comms];
+
+    // Change order penalty
+    const changePenalty = Math.min(changes * 8, 30);
+
+    // Issue penalty
+    const issuePenalty = Math.min(issues * 3, 20);
+
+    // Weighted total
+    const raw = (budgetScore * 0.3) + (scheduleScore * 0.3) + (milestoneScore * 0.2) + (commScore * 0.2);
+    const finalScore = Math.max(0, Math.min(100, Math.round(raw - changePenalty - issuePenalty)));
+
+    const scoreColor = finalScore >= 75 ? 'var(--green)' : finalScore >= 50 ? 'var(--amber)' : 'var(--red)';
+    const scoreLabel = finalScore >= 85 ? 'Excellent' : finalScore >= 75 ? 'Healthy' : finalScore >= 60 ? 'Needs Attention' : finalScore >= 40 ? 'At Risk' : 'Critical';
+
+    let html = '<div class="result-card" style="text-align:center">';
+    html += '<div class="gauge-container"><div class="gauge"><div class="gauge-bg"></div><div class="gauge-cover"></div><div class="gauge-score" style="color:' + scoreColor + '">' + finalScore + '</div></div></div>';
+    html += '<div class="gauge-label" style="color:' + scoreColor + '">' + scoreLabel + '</div>';
+    html += '</div>';
+
+    // Category breakdown
+    html += '<div class="result-card"><h3>&#128202; Score Breakdown</h3>';
+
+    const categories = [
+        { name: 'Budget Health', score: budgetScore, weight: '30%', detail: budgetRatio <= 1 ? 'On or under budget' : 'Spending ' + Math.round((budgetRatio - 1) * 100) + '% more than work completed' },
+        { name: 'Schedule Health', score: scheduleScore, weight: '30%', detail: scheduleRatio >= 1 ? 'On or ahead of schedule' : Math.round((1 - scheduleRatio) * 100) + '% behind where it should be' },
+        { name: 'Milestone Tracking', score: milestoneScore, weight: '20%', detail: onSchedule === 'all' ? 'All milestones on track' : onSchedule === 'most' ? 'Minor delays on 1-2 milestones' : 'Multiple milestones behind' },
+        { name: 'Communication', score: commScore, weight: '20%', detail: comms === 'excellent' ? 'Strong communication flow' : comms === 'good' ? 'Adequate updates' : 'Communication needs improvement' }
+    ];
+
+    categories.forEach(cat => {
+        const catColor = cat.score >= 75 ? 'var(--green)' : cat.score >= 50 ? 'var(--amber)' : 'var(--red)';
+        html += '<div class="vet-category">';
+        html += '<div class="vet-category-header"><span class="vet-category-name">' + cat.name + ' <span style="color:#94A3B8;font-weight:400">(' + cat.weight + ')</span></span><span class="vet-category-score" style="color:' + catColor + '">' + cat.score + '/100</span></div>';
+        html += '<div class="vet-bar"><div class="vet-bar-fill" style="width:' + cat.score + '%;background:' + catColor + '"></div></div>';
+        html += '<div style="font-size:0.8rem;color:#64748B;margin-top:0.3rem">' + cat.detail + '</div>';
+        html += '</div>';
+    });
+
+    if (changePenalty > 0) html += '<div class="result-row"><span class="result-label">Change Order Penalty (' + changes + ' filed)</span><span class="result-value red">-' + changePenalty + ' pts</span></div>';
+    if (issuePenalty > 0) html += '<div class="result-row"><span class="result-label">Open Issues Penalty (' + issues + ' items)</span><span class="result-value red">-' + issuePenalty + ' pts</span></div>';
+    html += '</div>';
+
+    // Recommendations
+    html += '<div class="result-card" style="border-left:4px solid ' + scoreColor + '"><h3>&#128161; Recommendations</h3>';
+    const recs = [];
+    if (budgetRatio > 1.15) recs.push('Your spending is outpacing work completion. Request a detailed cost breakdown from your contractor and compare against the original budget line by line.');
+    if (budgetRatio > 1.3) recs.push('You are significantly over budget relative to progress. Consider pausing non-critical work and getting a revised estimate for remaining scope.');
+    if (scheduleRatio < 0.85) recs.push('The project is falling behind schedule. Discuss acceleration options — additional crew, overtime, or revised milestone dates.');
+    if (scheduleRatio < 0.7) recs.push('Serious schedule slippage detected. Request a formal recovery plan from your contractor with specific dates and resources.');
+    if (onSchedule === 'some' || onSchedule === 'none') recs.push('Multiple milestones are behind. Hold a formal schedule review meeting and document revised completion dates in writing.');
+    if (comms === 'fair' || comms === 'poor') recs.push('Communication gaps create risk. Require weekly written progress reports and establish a regular check-in schedule.');
+    if (changes > 2) recs.push('Multiple change orders suggest scope issues. Have your contractor do a thorough remaining-scope review to identify any more surprises.');
+    if (issues > 5) recs.push('High number of open issues. Prioritize the top 3 by impact and get committed resolution dates.');
+    if (recs.length === 0) recs.push('Your project looks healthy! Continue current monitoring and keep communication channels open.');
+    recs.forEach(r => { html += '<p style="color:#475569;line-height:1.7;margin-bottom:0.8rem">&#8226; ' + r + '</p>'; });
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get weekly health score monitoring delivered to your inbox</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Get Monitoring</button></form></div>';
+
+    const el = document.getElementById('health-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== PERMIT CHECKLIST GENERATOR =====
+function calcPermits() {
+    const type = document.getElementById('pm-type').value;
+    const state = document.getElementById('pm-state').value;
+    const value = parseFloat(document.getElementById('pm-value').value);
+    const property = document.getElementById('pm-property').value;
+
+    const permitDB = {
+        kitchen: {
+            name: 'Kitchen Remodel',
+            required: [
+                { name: 'Building Permit', detail: 'Required for any structural changes, cabinet relocation, or layout modifications', time: '1-3 weeks', cost: '$150-$500' },
+                { name: 'Plumbing Permit', detail: 'Required if moving sink, dishwasher, or adding/relocating water lines', time: '3-5 days', cost: '$50-$200' },
+                { name: 'Electrical Permit', detail: 'Required for new circuits, outlet relocation, or panel upgrades', time: '3-5 days', cost: '$50-$200' }
+            ],
+            recommended: [
+                { name: 'Mechanical Permit', detail: 'If adding/modifying range hood ventilation to exterior', time: '3-5 days', cost: '$50-$150' },
+                { name: 'Gas Permit', detail: 'Required if installing or moving gas range/oven', time: '3-5 days', cost: '$50-$150' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'Check if your HOA requires architectural review for interior work', time: '2-6 weeks', cost: 'Varies' }
+            ],
+            inspections: ['Rough plumbing', 'Rough electrical', 'Framing (if walls moved)', 'Final inspection']
+        },
+        bathroom: {
+            name: 'Bathroom Remodel',
+            required: [
+                { name: 'Building Permit', detail: 'Required for layout changes, fixture relocation, or structural modifications', time: '1-3 weeks', cost: '$150-$500' },
+                { name: 'Plumbing Permit', detail: 'Required for any pipe work — toilet, shower/tub, sink relocation', time: '3-5 days', cost: '$50-$200' },
+                { name: 'Electrical Permit', detail: 'Required for GFCI outlets, fan installation, or lighting changes', time: '3-5 days', cost: '$50-$200' }
+            ],
+            recommended: [
+                { name: 'Mechanical Permit', detail: 'If installing new exhaust fan or modifying ventilation', time: '3-5 days', cost: '$50-$150' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'Required by some associations for plumbing modifications', time: '2-6 weeks', cost: 'Varies' }
+            ],
+            inspections: ['Rough plumbing', 'Rough electrical', 'Waterproofing (shower/tub)', 'Final inspection']
+        },
+        addition: {
+            name: 'Home Addition',
+            required: [
+                { name: 'Building Permit', detail: 'Always required — covers structural, framing, and general construction', time: '2-6 weeks', cost: '$500-$2,000' },
+                { name: 'Zoning Approval', detail: 'Verify setbacks, lot coverage, and height restrictions', time: '2-4 weeks', cost: '$100-$500' },
+                { name: 'Electrical Permit', detail: 'New circuits, panel upgrade, and all electrical in addition', time: '3-5 days', cost: '$100-$300' },
+                { name: 'Plumbing Permit', detail: 'If addition includes bathroom, kitchen, or laundry', time: '3-5 days', cost: '$100-$300' },
+                { name: 'Mechanical Permit', detail: 'HVAC extension or new system for the addition', time: '3-5 days', cost: '$100-$300' }
+            ],
+            recommended: [
+                { name: 'Site Plan / Survey', detail: 'Required to verify property lines and setback compliance', time: '1-2 weeks', cost: '$300-$800' },
+                { name: 'Engineering Review', detail: 'Structural engineering for foundation and connections', time: '1-2 weeks', cost: '$500-$2,000' },
+                { name: 'Energy Compliance', detail: 'Insulation, windows, and HVAC must meet energy code', time: 'Part of plan review', cost: 'Included' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'Architectural review for exterior changes', time: '2-8 weeks', cost: 'Varies' },
+                { name: 'Tree Removal Permit', detail: 'If any trees are in the construction zone', time: '1-2 weeks', cost: '$50-$200' }
+            ],
+            inspections: ['Foundation', 'Framing', 'Rough MEP', 'Insulation', 'Drywall', 'Final']
+        },
+        basement: {
+            name: 'Basement Finish',
+            required: [
+                { name: 'Building Permit', detail: 'Required for framing, drywall, and creating habitable space', time: '1-3 weeks', cost: '$150-$500' },
+                { name: 'Electrical Permit', detail: 'New outlets, lighting, smoke detectors, and circuits', time: '3-5 days', cost: '$50-$200' }
+            ],
+            recommended: [
+                { name: 'Plumbing Permit', detail: 'If adding bathroom, wet bar, or laundry', time: '3-5 days', cost: '$50-$200' },
+                { name: 'Mechanical Permit', detail: 'If extending HVAC or adding ventilation', time: '3-5 days', cost: '$50-$150' },
+                { name: 'Egress Window Permit', detail: 'Bedrooms require egress windows — verify size requirements', time: 'Part of building permit', cost: 'Included' }
+            ],
+            optional: [
+                { name: 'Radon Mitigation', detail: 'Consider testing and mitigation, especially in Michigan/Midwest', time: '1-2 days', cost: '$500-$1,500' }
+            ],
+            inspections: ['Framing', 'Rough electrical', 'Rough plumbing (if applicable)', 'Insulation', 'Final']
+        },
+        deck: {
+            name: 'Deck / Patio',
+            required: [
+                { name: 'Building Permit', detail: 'Required for any attached or elevated deck over 30" from grade', time: '1-3 weeks', cost: '$100-$400' },
+                { name: 'Zoning Review', detail: 'Verify setbacks and lot coverage — decks count toward coverage', time: 'Part of permit', cost: 'Included' }
+            ],
+            recommended: [
+                { name: 'Site Plan', detail: 'Show deck location relative to property lines', time: '1-3 days', cost: '$0-$200' },
+                { name: 'Electrical Permit', detail: 'If adding outdoor outlets, lighting, or ceiling fans', time: '3-5 days', cost: '$50-$150' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'Many HOAs regulate deck materials, colors, and placement', time: '2-6 weeks', cost: 'Varies' }
+            ],
+            inspections: ['Footing/post holes', 'Framing', 'Final (railing, stairs, ledger board)']
+        },
+        roof: {
+            name: 'Roof Replacement',
+            required: [
+                { name: 'Building Permit', detail: 'Required in most municipalities for roof replacement', time: '1-5 days', cost: '$100-$300' }
+            ],
+            recommended: [
+                { name: 'Dumpster Permit', detail: 'Street placement of dumpster may require a permit', time: '1-2 days', cost: '$25-$75' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'May regulate shingle color, material, and style', time: '2-4 weeks', cost: 'Varies' }
+            ],
+            inspections: ['Final roof inspection']
+        },
+        electrical: {
+            name: 'Electrical Work',
+            required: [
+                { name: 'Electrical Permit', detail: 'Required for any work beyond simple fixture swaps', time: '3-5 days', cost: '$50-$250' }
+            ],
+            recommended: [
+                { name: 'Building Permit', detail: 'If work involves cutting into walls or structural changes', time: '1-3 weeks', cost: '$150-$500' }
+            ],
+            optional: [],
+            inspections: ['Rough electrical', 'Final electrical']
+        },
+        plumbing: {
+            name: 'Plumbing Work',
+            required: [
+                { name: 'Plumbing Permit', detail: 'Required for any pipe work beyond simple fixture replacements', time: '3-5 days', cost: '$50-$250' }
+            ],
+            recommended: [
+                { name: 'Building Permit', detail: 'If work involves opening walls or floor modifications', time: '1-3 weeks', cost: '$150-$500' }
+            ],
+            optional: [],
+            inspections: ['Rough plumbing', 'Final plumbing']
+        },
+        hvac: {
+            name: 'HVAC Replacement',
+            required: [
+                { name: 'Mechanical Permit', detail: 'Required for furnace, AC, or ductwork changes', time: '3-5 days', cost: '$50-$250' }
+            ],
+            recommended: [
+                { name: 'Electrical Permit', detail: 'If new circuit or disconnect is needed', time: '3-5 days', cost: '$50-$150' },
+                { name: 'Gas Permit', detail: 'If gas furnace or gas line work involved', time: '3-5 days', cost: '$50-$150' }
+            ],
+            optional: [],
+            inspections: ['Rough mechanical', 'Final mechanical']
+        },
+        newbuild: {
+            name: 'New Construction',
+            required: [
+                { name: 'Building Permit', detail: 'Comprehensive permit covering all construction', time: '4-12 weeks', cost: '$2,000-$10,000' },
+                { name: 'Zoning Approval', detail: 'Full zoning review for use, setbacks, height, density', time: '2-8 weeks', cost: '$200-$1,000' },
+                { name: 'Site Plan Review', detail: 'Engineering review of grading, drainage, utilities', time: '2-6 weeks', cost: '$500-$2,000' },
+                { name: 'Electrical Permit', detail: 'Complete electrical system', time: '3-5 days', cost: '$200-$500' },
+                { name: 'Plumbing Permit', detail: 'Complete plumbing system including sewer/water connections', time: '3-5 days', cost: '$200-$500' },
+                { name: 'Mechanical Permit', detail: 'HVAC system installation', time: '3-5 days', cost: '$200-$500' },
+                { name: 'Grading Permit', detail: 'Earthwork and site grading', time: '1-3 weeks', cost: '$100-$500' }
+            ],
+            recommended: [
+                { name: 'Soil Report', detail: 'Geotechnical study for foundation design', time: '1-2 weeks', cost: '$500-$2,000' },
+                { name: 'Driveway/ROW Permit', detail: 'Access from public road', time: '1-3 weeks', cost: '$100-$500' },
+                { name: 'Environmental Review', detail: 'Wetlands, flood zone, endangered species', time: '2-8 weeks', cost: '$500-$5,000' }
+            ],
+            optional: [
+                { name: 'HOA Approval', detail: 'Full architectural review in managed communities', time: '4-12 weeks', cost: 'Varies' }
+            ],
+            inspections: ['Foundation', 'Framing', 'Rough MEP', 'Insulation', 'Drywall', 'Final', 'Certificate of Occupancy']
+        }
+    };
+
+    const stateNotes = {
+        MI: 'Michigan requires licensed contractors for work over $600. State-licensed electricians and plumbers required for permitted work. Most cities use the Michigan Residential Code (IRC-based).',
+        OH: 'Ohio requires residential contractors to register. Licensed electricians required. Plumbing permits through local jurisdiction.',
+        IN: 'Indiana does not have statewide contractor licensing. Local permits vary significantly by municipality.',
+        IL: 'Illinois requires licensed roofing contractors. Electrical work requires state-licensed electricians. Chicago has its own building code.',
+        TX: 'Texas does not require statewide general contractor licenses. Electricians must be licensed. Local permits vary widely.',
+        FL: 'Florida requires state-licensed contractors for work over $500. Strict hurricane-code compliance. All trades must be licensed.',
+        CA: 'California requires state contractor licenses (CSLB) for work over $500. Strict energy code (Title 24). All trades licensed.',
+        NY: 'New York requires licensed contractors in most cities. NYC has its own Department of Buildings. Strict fire code compliance.',
+        GA: 'Georgia requires state contractor licensing. Low-voltage and residential basic exempt. Local jurisdictions handle permits.',
+        PA: 'Pennsylvania does not require statewide general contractor licenses. Local requirements vary. Electricians must be licensed.',
+        other: 'Requirements vary by state. Check with your local building department for specific licensing and permit requirements.'
+    };
+
+    const data = permitDB[type];
+    const stateNote = stateNotes[state] || stateNotes.other;
+
+    const totalPermits = data.required.length + data.recommended.length + data.optional.length;
+    const estCostLow = data.required.reduce((s, p) => s + parseInt(p.cost.split('-')[0].replace(/[$,]/g, '')), 0);
+    const estCostHigh = data.required.reduce((s, p) => s + parseInt((p.cost.split('-')[1] || p.cost.split('-')[0]).replace(/[$,]/g, '')), 0);
+
+    let html = '<div class="stats-row">';
+    html += '<div class="stat-box"><div class="number" style="color:var(--red)">' + data.required.length + '</div><div class="label">Required Permits</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--amber)">' + data.recommended.length + '</div><div class="label">Recommended</div></div>';
+    html += '<div class="stat-box"><div class="number" style="color:var(--purple)">' + data.inspections.length + '</div><div class="label">Inspections Needed</div></div>';
+    html += '</div>';
+
+    // Required
+    html += '<div class="result-card"><h3 style="color:var(--red)">&#9888;&#65039; Required Permits</h3>';
+    data.required.forEach(p => {
+        html += '<div class="check-item"><div class="check-icon required">!</div><div class="check-text"><span class="check-name">' + p.name + '</span><span class="check-detail">' + p.detail + '</span><div class="permit-timeline">&#128337; ' + p.time + ' &nbsp;|&nbsp; &#128176; ' + p.cost + '</div></div></div>';
+    });
+    html += '</div>';
+
+    // Recommended
+    if (data.recommended.length > 0) {
+        html += '<div class="result-card"><h3 style="color:var(--amber)">&#128308; Recommended Permits</h3>';
+        data.recommended.forEach(p => {
+            html += '<div class="check-item"><div class="check-icon recommended">+</div><div class="check-text"><span class="check-name">' + p.name + '</span><span class="check-detail">' + p.detail + '</span><div class="permit-timeline">&#128337; ' + p.time + ' &nbsp;|&nbsp; &#128176; ' + p.cost + '</div></div></div>';
+        });
+        html += '</div>';
+    }
+
+    // Optional
+    if (data.optional.length > 0) {
+        html += '<div class="result-card"><h3 style="color:#94A3B8">&#128995; Optional / Conditional</h3>';
+        data.optional.forEach(p => {
+            html += '<div class="check-item"><div class="check-icon optional">?</div><div class="check-text"><span class="check-name">' + p.name + '</span><span class="check-detail">' + p.detail + '</span><div class="permit-timeline">&#128337; ' + p.time + ' &nbsp;|&nbsp; &#128176; ' + p.cost + '</div></div></div>';
+        });
+        html += '</div>';
+    }
+
+    // Inspections
+    html += '<div class="result-card"><h3>&#128270; Required Inspections</h3>';
+    data.inspections.forEach((insp, i) => {
+        html += '<div class="result-row"><span class="result-label"><strong>' + (i + 1) + '.</strong> ' + insp + '</span><span class="result-value" style="font-size:0.85rem;color:#64748B">Schedule 48hrs ahead</span></div>';
+    });
+    html += '</div>';
+
+    // State note
+    html += '<div class="result-card" style="border-left:4px solid var(--purple)"><h3>&#127463;&#127480; ' + state + ' State Requirements</h3>';
+    html += '<p style="color:#475569;line-height:1.7">' + stateNote + '</p>';
+    html += '<p style="color:#475569;line-height:1.7;margin-top:0.8rem"><strong>Estimated permit costs:</strong> ' + fmt(estCostLow) + ' — ' + fmt(estCostHigh) + ' (required permits only)</p>';
+    if (property === 'condo') html += '<p style="color:#C2410C;margin-top:0.5rem;font-weight:600">&#9888; Condo/townhome projects may need HOA board approval before applying for permits. Check your CC&Rs first.</p>';
+    html += '</div>';
+
+    html += '<div class="lead-capture"><p>&#128233; Get this checklist as a printable PDF with local building department contacts</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Send Checklist</button></form></div>';
+
+    const el = document.getElementById('permit-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== CONTRACTOR VETTING SCORECARD =====
+function calcVetting() {
+    const name = document.getElementById('cv-name').value || 'This Contractor';
+    const license = document.getElementById('cv-license').value;
+    const insurance = document.getElementById('cv-insurance').value;
+    const years = parseInt(document.getElementById('cv-years').value);
+    const reviews = document.getElementById('cv-reviews').value;
+    const numReviews = parseInt(document.getElementById('cv-numreviews').value);
+    const references = document.getElementById('cv-references').value;
+    const contract = document.getElementById('cv-contract').value;
+    const bbb = document.getElementById('cv-bbb').value;
+    const payment = document.getElementById('cv-payment').value;
+
+    // Scoring
+    const licenseScores = { yes: 100, local: 70, expired: 20, no: 0, unknown: 10 };
+    const insuranceScores = { full: 100, gl: 60, no: 0, unknown: 10 };
+    const reviewScores = { '5': 100, '4': 80, '3': 50, '2': 20, '0': 30 };
+    const refScores = { '3plus': 100, '1to2': 65, offered: 40, none: 10 };
+    const contractScores = { detailed: 100, basic: 60, verbal: 20, none: 0 };
+    const bbbScores = { aplus: 100, accredited: 80, notaccredited: 50, complaints: 15, none: 40 };
+    const paymentScores = { milestone: 100, progress: 80, partial: 50, full: 5 };
+
+    let licenseScore = licenseScores[license];
+    let insuranceScore = insuranceScores[insurance];
+    let yearsScore = years >= 10 ? 100 : years >= 5 ? 80 : years >= 3 ? 60 : years >= 1 ? 40 : 15;
+    let reviewScore = parseInt(reviewScores[reviews]);
+    // Boost/penalize based on review count
+    if (numReviews >= 50) reviewScore = Math.min(100, reviewScore + 10);
+    else if (numReviews < 5 && reviews !== '0') reviewScore = Math.max(0, reviewScore - 15);
+    let refScore = refScores[references];
+    let contractScore = contractScores[contract];
+    let bbbScore = bbbScores[bbb];
+    let paymentScore = paymentScores[payment];
+
+    const categories = [
+        { name: 'Licensing', score: licenseScore, weight: 0.2, icon: '&#128196;' },
+        { name: 'Insurance', score: insuranceScore, weight: 0.2, icon: '&#128737;&#65039;' },
+        { name: 'Experience', score: yearsScore, weight: 0.1, icon: '&#128197;' },
+        { name: 'Online Reviews', score: reviewScore, weight: 0.15, icon: '&#11088;' },
+        { name: 'References', score: refScore, weight: 0.1, icon: '&#128101;' },
+        { name: 'Contract Quality', score: contractScore, weight: 0.1, icon: '&#128221;' },
+        { name: 'BBB Standing', score: bbbScore, weight: 0.05, icon: '&#127970;' },
+        { name: 'Payment Terms', score: paymentScore, weight: 0.1, icon: '&#128176;' }
+    ];
+
+    const totalScore = Math.round(categories.reduce((s, c) => s + (c.score * c.weight), 0));
+    const scoreColor = totalScore >= 80 ? 'var(--green)' : totalScore >= 60 ? 'var(--amber)' : 'var(--red)';
+    const scoreLabel = totalScore >= 85 ? 'Highly Trusted' : totalScore >= 70 ? 'Trustworthy' : totalScore >= 55 ? 'Proceed with Caution' : totalScore >= 35 ? 'High Risk' : 'Do Not Hire';
+
+    // SVG ring
+    const circumference = 2 * Math.PI * 70;
+    const offset = circumference - (totalScore / 100) * circumference;
+
+    let html = '<div class="result-card" style="text-align:center">';
+    html += '<h3 style="margin-bottom:0.5rem">' + name + '</h3>';
+    html += '<div class="score-ring-container"><div class="score-ring">';
+    html += '<svg width="180" height="180"><circle cx="90" cy="90" r="70" fill="none" stroke="#F1F5F9" stroke-width="12"/>';
+    html += '<circle cx="90" cy="90" r="70" fill="none" stroke="' + scoreColor + '" stroke-width="12" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '" stroke-linecap="round"/></svg>';
+    html += '<div class="score-ring-text"><div class="score-num" style="color:' + scoreColor + '">' + totalScore + '</div><div class="score-lbl">' + scoreLabel + '</div></div>';
+    html += '</div></div></div>';
+
+    // Category breakdown
+    html += '<div class="result-card"><h3>&#128202; Category Scores</h3>';
+    categories.forEach(cat => {
+        const catColor = cat.score >= 75 ? 'var(--green)' : cat.score >= 50 ? 'var(--amber)' : 'var(--red)';
+        html += '<div class="vet-category">';
+        html += '<div class="vet-category-header"><span class="vet-category-name">' + cat.icon + ' ' + cat.name + ' <span style="color:#94A3B8;font-weight:400">(' + Math.round(cat.weight * 100) + '%)</span></span><span class="vet-category-score" style="color:' + catColor + '">' + cat.score + '/100</span></div>';
+        html += '<div class="vet-bar"><div class="vet-bar-fill" style="width:' + cat.score + '%;background:' + catColor + '"></div></div>';
+        html += '</div>';
+    });
+    html += '</div>';
+
+    // Red flags and green flags
+    const redFlags = [];
+    const greenFlags = [];
+
+    if (license === 'no') redFlags.push('No contractor license. In most states, unlicensed contractors cannot legally pull permits or perform work over a certain dollar amount.');
+    if (license === 'expired') redFlags.push('Expired license. The contractor may not be legally authorized to perform work. Ask for proof of renewal.');
+    if (license === 'unknown') redFlags.push('License status unknown. Always verify — you can check your state licensing board online.');
+    if (insurance === 'no') redFlags.push('No insurance. If a worker is injured on your property, YOU may be liable. This is a deal-breaker.');
+    if (insurance === 'unknown') redFlags.push('Insurance status unknown. Request a Certificate of Insurance (COI) before any work begins.');
+    if (insurance === 'gl') redFlags.push('Has general liability but no workers\' comp. If they have employees, workers\' comp is typically required by law.');
+    if (payment === 'full') redFlags.push('Requesting 100% payment upfront is the #1 red flag for contractor fraud. Never pay more than 10-20% to start.');
+    if (contract === 'verbal' || contract === 'none') redFlags.push('No written contract. A detailed written contract is essential — it\'s your only protection if things go wrong.');
+    if (reviews === '2') redFlags.push('Below-average online reviews suggest a pattern of customer dissatisfaction.');
+    if (bbb === 'complaints') redFlags.push('BBB complaints on file. Review the nature of complaints before proceeding.');
+    if (years < 2) redFlags.push('Less than 2 years in business. New contractors have a higher failure rate — ensure they have adequate insurance.');
+
+    if (license === 'yes') greenFlags.push('Verified state license confirms they meet minimum competency and legal requirements.');
+    if (insurance === 'full') greenFlags.push('Full insurance (GL + Workers\' Comp) protects you from liability if anything goes wrong.');
+    if (years >= 10) greenFlags.push(years + ' years in business demonstrates stability and staying power.');
+    if (reviews === '5' && numReviews >= 20) greenFlags.push('Excellent reviews with a solid review count — strong social proof.');
+    if (references === '3plus') greenFlags.push('3+ references shows confidence. Call them and ask about timeliness, communication, and change orders.');
+    if (contract === 'detailed') greenFlags.push('Detailed contract with scope, milestones, and warranty shows professionalism.');
+    if (payment === 'milestone') greenFlags.push('Milestone-based payments align incentives — you pay as work is completed and verified.');
+
+    if (redFlags.length > 0) {
+        html += '<div class="result-card" style="border-left:4px solid var(--red)"><h3>&#128680; Red Flags</h3>';
+        redFlags.forEach(f => { html += '<p style="color:#DC2626;line-height:1.7;margin-bottom:0.8rem">&#9888; ' + f + '</p>'; });
+        html += '</div>';
+    }
+
+    if (greenFlags.length > 0) {
+        html += '<div class="result-card" style="border-left:4px solid var(--green)"><h3>&#9989; Green Flags</h3>';
+        greenFlags.forEach(f => { html += '<p style="color:#15803D;line-height:1.7;margin-bottom:0.8rem">&#9989; ' + f + '</p>'; });
+        html += '</div>';
+    }
+
+    html += '<div class="lead-capture"><p>&#128233; Get a printable vetting scorecard to share with your contractor</p><form onsubmit="return captureEmail(this)"><input type="email" placeholder="Enter your email" required><button type="submit">Send Scorecard</button></form></div>';
+
+    const el = document.getElementById('vetting-results');
+    el.innerHTML = html;
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+
+</body>
+</html>
