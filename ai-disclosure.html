@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Disclosure - BuildSynq</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: #1E293B; }
+        header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-size: 1.8rem; font-weight: 900; color: #6366F1; text-decoration: none; }
+        nav { display: flex; gap: 2.5rem; align-items: center; }
+        .nav-link { text-decoration: none; color: #1E293B; font-weight: 600; font-size: 1rem; }
+        .nav-link:hover { color: #6366F1; }
+        .cta-button { background: #6366F1; color: white; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .page-hero { padding: 10rem 5% 5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align: center; }
+        .page-hero h1 { font-size: 3rem; font-weight: 900; color: white; margin-bottom: 1rem; }
+        .page-hero p { font-size: 1.1rem; color: rgba(255,255,255,0.9); }
+        .content { max-width: 860px; margin: 0 auto; padding: 5rem 2rem 6rem; }
+        .last-updated { display: inline-block; background: #EEF2FF; color: #6366F1; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 3rem; }
+        h2 { font-size: 1.5rem; font-weight: 800; color: #1E293B; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #EEF2FF; }
+        h3 { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: #374151; }
+        p { line-height: 1.9; color: #475569; margin-bottom: 1rem; }
+        ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        ul li { line-height: 1.9; color: #475569; margin-bottom: 0.3rem; }
+        a { color: #6366F1; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .highlight-box { background: #F8FAFC; border-left: 4px solid #6366F1; padding: 1.5rem 2rem; border-radius: 0 8px 8px 0; margin: 2rem 0; }
+        .highlight-box p { margin: 0; font-weight: 500; }
+        .ai-card { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .ai-card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .ai-icon { width: 48px; height: 48px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+        .ai-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #1E293B; }
+        .ai-card p { margin: 0; color: #475569; }
+        .rights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+        .right-item { background: #F8FAFC; border-radius: 10px; padding: 1.5rem; }
+        .right-item h4 { font-weight: 700; color: #6366F1; margin-bottom: 0.5rem; }
+        .right-item p { margin: 0; font-size: 0.95rem; }
+        @media (max-width: 600px) { .rights-grid { grid-template-columns: 1fr; } }
+        footer { background: #1E293B; color: rgba(255,255,255,0.7); text-align: center; padding: 3rem 5%; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; }
+        .footer-links a:hover { color: white; }
+        footer p { font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/index.html" class="logo">BuildSynq</a>
+    <nav>
+        <a href="/index.html" class="nav-link">Home</a>
+        <a href="/residential.html" class="nav-link">Residential</a>
+        <a href="/commercial.html" class="nav-link">Commercial</a>
+        <a href="/government.html" class="nav-link">Government</a>
+        <a href="https://calendly.com/buildsynq/demo" class="cta-button">Get Demo</a>
+    </nav>
+</header>
+
+<div class="page-hero">
+    <h1>AI Disclosure</h1>
+    <p>Transparency about how artificial intelligence powers BuildSynq</p>
+</div>
+
+<div class="content">
+    <span class="last-updated">Last Updated: February 24, 2026</span>
+
+    <div class="highlight-box">
+        <p>BuildSynq is committed to transparency about our use of artificial intelligence. This disclosure explains which features use AI, how AI influences decisions on our platform, your rights regarding automated decisions, and the limitations of our AI systems.</p>
+    </div>
+
+    <h2>Our Commitment to Responsible AI</h2>
+    <p>AI is central to BuildSynq's value proposition — we use it to eliminate payment delays, reduce project risk, and bring intelligence to construction management. We believe you deserve to understand exactly how these systems work and how they affect you.</p>
+    <p>BuildSynq's AI systems are powered by Anthropic's Claude models and purpose-built machine learning pipelines trained on construction industry data.</p>
+
+    <h2>AI Features on the Platform</h2>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">📸</div>
+            <h3>Photo Verification Agent</h3>
+        </div>
+        <p>Analyzes GPS-tagged photos submitted by contractors to verify milestone completion. The system checks for location authenticity, image integrity, and visual consistency with expected milestone deliverables. Photo verification results inform — but do not automatically trigger — payment releases.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">⚡</div>
+            <h3>Payment Automation Agent</h3>
+        </div>
+        <p>Monitors milestone completion signals and generates payment release recommendations. Automated payment triggers require explicit user authorization. The agent does not release funds without human confirmation unless you have explicitly enabled fully automated disbursement in your account settings.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">🎯</div>
+            <h3>Risk Scoring Engine</h3>
+        </div>
+        <p>Generates numerical risk scores for projects and contractors by analyzing permit history, bid variance, contractor backlog, funding status, litigation history, and jurisdiction-specific factors. Risk scores range from 0–100. Scores above 75 trigger human review recommendations. Risk scores are advisory — final project and payment decisions remain with platform users.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">💰</div>
+            <h3>Cost Intelligence Engine</h3>
+        </div>
+        <p>Estimates project costs using historical contract data, regional labor and materials benchmarks, project type, and scope indicators. Estimates are provided as reference ranges, not guarantees. Actual costs will vary based on site conditions, contractor pricing, and market fluctuations.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">📅</div>
+            <h3>Schedule Optimization Agent</h3>
+        </div>
+        <p>Analyzes project timelines, resource availability, weather patterns, and historical completion data to suggest schedule optimizations. Schedule recommendations are advisory and do not automatically modify your project timeline.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">🔍</div>
+            <h3>Compliance Monitor</h3>
+        </div>
+        <p>Continuously monitors projects for compliance with permit conditions, labor requirements (Davis-Bacon, prevailing wage), DBE/MBE targets, and regulatory deadlines. Compliance alerts are informational; BuildSynq does not provide legal advice.</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-card-header">
+            <div class="ai-icon">🏛️</div>
+            <h3>Construction Intelligence Terminal (CIT)</h3>
+        </div>
+        <p>Available to Commercial and Government tier users. CIT uses AI to extract structured data from unstructured government procurement documents, resolve entity identities across datasets, answer natural language queries about projects and contractors, and generate market intelligence reports. All CIT outputs are analytical in nature; users are responsible for verifying data before making procurement or contracting decisions.</p>
+    </div>
+
+    <h2>How AI Influences Decisions</h2>
+    <p>BuildSynq AI systems operate in three modes, clearly labeled in the platform:</p>
+    <ul>
+        <li><strong>Advisory (ℹ️):</strong> AI provides information or recommendations; all decisions are made by humans. Most AI features operate in this mode.</li>
+        <li><strong>Automated with Override (⚡):</strong> AI takes a preliminary action that you can review and reverse within a defined window. Payment recommendations use this mode when auto-disbursement is enabled.</li>
+        <li><strong>Fully Automated (🤖):</strong> Only available for low-stakes actions explicitly configured by users (e.g., automated status notifications). Financial transactions are never fully automated without explicit opt-in.</li>
+    </ul>
+
+    <h2>Your Rights Regarding AI Decisions</h2>
+
+    <div class="rights-grid">
+        <div class="right-item">
+            <h4>Right to Explanation</h4>
+            <p>You can request an explanation of any AI-generated score, recommendation, or action that affects your account.</p>
+        </div>
+        <div class="right-item">
+            <h4>Right to Human Review</h4>
+            <p>You may request human review of any automated decision that significantly affects your payments or project status.</p>
+        </div>
+        <div class="right-item">
+            <h4>Right to Contest</h4>
+            <p>You may contest AI-generated risk scores or compliance flags if you believe they are inaccurate.</p>
+        </div>
+        <div class="right-item">
+            <h4>Right to Opt Out</h4>
+            <p>You may disable automated payment recommendations and AI-driven notifications in your account settings.</p>
+        </div>
+    </div>
+    <p>To exercise any of these rights, contact <a href="mailto:ai@buildsynq.com">ai@buildsynq.com</a>.</p>
+
+    <h2>AI Limitations and Known Risks</h2>
+    <p>We are transparent about the limitations of our AI systems:</p>
+    <ul>
+        <li><strong>Data quality:</strong> AI outputs are only as good as the underlying data. Incomplete project records, stale permit data, or missing contractor history can reduce accuracy.</li>
+        <li><strong>Bias:</strong> Machine learning models trained on historical data may reflect historical patterns that disadvantage certain contractor groups. We actively audit our models for bias.</li>
+        <li><strong>Confidence levels:</strong> All AI outputs include a confidence indicator. Low-confidence outputs should be treated with additional scrutiny.</li>
+        <li><strong>Novel situations:</strong> AI systems perform less reliably on project types or jurisdictions with limited historical data.</li>
+        <li><strong>Not legal or financial advice:</strong> AI outputs on BuildSynq do not constitute legal, financial, or professional advice.</li>
+    </ul>
+
+    <h2>AI Provider</h2>
+    <p>BuildSynq's conversational AI and document intelligence features are powered by <a href="https://anthropic.com" target="_blank">Anthropic's Claude</a>. Anthropic is an AI safety company. Data submitted to AI features may be processed by Anthropic in accordance with <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic's Privacy Policy</a>. BuildSynq does not share personally identifiable information with AI providers beyond what is necessary to fulfill your requests.</p>
+
+    <h2>AI Governance</h2>
+    <p>BuildSynq maintains an internal AI review process that includes regular audits of model outputs for accuracy and bias, human review of high-impact automated decisions, incident response procedures for AI errors, and ongoing monitoring of applicable AI regulations including the EU AI Act and emerging U.S. federal AI guidelines for government contractors.</p>
+
+    <h2>Contact</h2>
+    <p>For questions about our AI systems or to exercise your AI-related rights:<br>
+    Email: <a href="mailto:ai@buildsynq.com">ai@buildsynq.com</a><br>
+    Website: <a href="https://buildsynq.com">buildsynq.com</a></p>
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="/index.html">Home</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms-of-service.html">Terms of Service</a>
+        <a href="/cookie-policy.html">Cookie Policy</a>
+        <a href="/ai-disclosure.html">AI Disclosure</a>
+    </div>
+    <p>&copy; 2026 BuildSynq, Inc. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
