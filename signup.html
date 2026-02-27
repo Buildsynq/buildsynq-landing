@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSynq - Create Your Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #FF6B35;
+  --dark: #1A1A2E;
+  --text: #2D2D3A;
+  --purple: #667eea;
+  --purple-dark: #764ba2;
+  --green: #10B981;
+  --light: #F4F4F9;
+  --border: #E2E8F0;
+  --muted: #64748B;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--light);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  padding: 1.2rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+}
+.logo {
+  font-family: 'Darker Grotesque', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--dark);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header-link {
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+.header-link span { color: var(--purple); font-weight: 600; }
+
+/* Main Layout */
+.page-wrap {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 72px);
+}
+
+/* Left Panel */
+.left-panel {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.left-panel::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.left-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.left-content { position: relative; z-index: 1; }
+.left-panel h1 {
+  font-family: 'Darker Grotesque', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.left-panel p {
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 380px;
+}
+.trust-items { display: flex; flex-direction: column; gap: 1rem; }
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+}
+.trust-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.trust-text { font-size: 0.9rem; }
+.trust-text strong { display: block; font-weight: 700; }
+.trust-text span { opacity: 0.75; font-size: 0.82rem; }
+
+/* Right Panel */
+.right-panel {
+  background: white;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.form-header { margin-bottom: 2rem; }
+.plan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #EEF2FF;
+  color: var(--purple);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.form-header h2 {
+  font-family: 'Darker Grotesque', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 0.3rem;
+}
+.form-header p { color: var(--muted); font-size: 0.9rem; }
+
+/* Form */
+.signup-form { display: flex; flex-direction: column; gap: 1.1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.form-group input, .form-group select {
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+.form-group input::placeholder { color: #CBD5E1; }
+
+.password-wrap { position: relative; }
+.password-wrap input { padding-right: 3rem; width: 100%; }
+.toggle-pw {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 1rem;
+  padding: 0;
+}
+
+.strength-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 0.4rem;
+  overflow: hidden;
+}
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  transition: width 0.3s, background 0.3s;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.terms input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  accent-color: var(--purple);
+  margin-top: 1px;
+}
+.terms a { color: var(--purple); text-decoration: none; font-weight: 600; }
+.terms a:hover { text-decoration: underline; }
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+.submit-btn:hover {
+  box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+  transform: translateY(-2px);
+}
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin: 0.3rem 0;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.signin-link {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+.signin-link a { color: var(--purple); font-weight: 700; text-decoration: none; }
+.signin-link a:hover { text-decoration: underline; }
+
+/* Success State */
+.success-state {
+  display: none;
+  text-align: center;
+  padding: 2rem 0;
+}
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: #ECFDF5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.5rem;
+}
+.success-state h3 {
+  font-family: 'Darker Grotesque', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+.success-state p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+.success-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: white;
+  padding: 0.9rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.success-btn:hover { box-shadow: 0 8px 25px rgba(102,126,234,0.4); transform: translateY(-2px); }
+
+/* Error */
+.field-error {
+  font-size: 0.78rem;
+  color: #EF4444;
+  margin-top: 0.2rem;
+  display: none;
+}
+.form-group.error input { border-color: #EF4444; }
+.form-group.error .field-error { display: block; }
+
+@media (max-width: 900px) {
+  .page-wrap { grid-template-columns: 1fr; }
+  .left-panel { display: none; }
+  .right-panel { padding: 2.5rem 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">BuildSynq</a>
+  <a href="#" class="header-link">Already have an account? <span>Sign in</span></a>
+</header>
+
+<div class="page-wrap">
+  <!-- Left Panel -->
+  <div class="left-panel">
+    <div class="left-content">
+      <h1>Protect Your Home Investment</h1>
+      <p>Join thousands of homeowners who use BuildSynq to manage contractors, track milestones, and ensure every payment is earned.</p>
+      <div class="trust-items">
+        <div class="trust-item">
+          <div class="trust-icon">🔒</div>
+          <div class="trust-text">
+            <strong>Milestone-Based Payments</strong>
+            <span>Pay only when work is verified complete</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">📸</div>
+          <div class="trust-text">
+            <strong>GPS-Verified Documentation</strong>
+            <span>Every photo stamped with location & time</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">⛓️</div>
+          <div class="trust-text">
+            <strong>Blockchain Audit Trail</strong>
+            <span>Tamper-proof record of every transaction</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">🤖</div>
+          <div class="trust-text">
+            <strong>AI Project Intelligence</strong>
+            <span>Real-time cost estimates and risk alerts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div id="formView">
+      <div class="form-header">
+        <div class="plan-badge">🏠 Homeowner Account</div>
+        <h2>Create Your Account</h2>
+        <p>Free to start · No credit card required</p>
+      </div>
+
+      <form class="signup-form" id="signupForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group" id="group-firstName">
+            <label>First Name</label>
+            <input type="text" id="firstName" placeholder="John" autocomplete="given-name">
+            <span class="field-error">Required</span>
+          </div>
+          <div class="form-group" id="group-lastName">
+            <label>Last Name</label>
+            <input type="text" id="lastName" placeholder="Smith" autocomplete="family-name">
+            <span class="field-error">Required</span>
+          </div>
+        </div>
+
+        <div class="form-group" id="group-email">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="john@example.com" autocomplete="email">
+          <span class="field-error">Enter a valid email</span>
+        </div>
+
+        <div class="form-group" id="group-phone">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="(555) 000-0000" autocomplete="tel">
+          <span class="field-error">Required</span>
+        </div>
+
+        <div class="form-group" id="group-password">
+          <label>Password</label>
+          <div class="password-wrap">
+            <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)">
+            <button type="button" class="toggle-pw" onclick="togglePassword()">👁</button>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <span class="field-error">Min. 8 characters</span>
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="agreeTerms">
+          <label for="agreeTerms">I agree to BuildSynq's <a href="/terms-of-service.html" target="_blank">Terms of Service</a> and <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>. I understand my data is protected and never sold.</label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Create Free Account →
+        </button>
+
+        <div class="signin-link">
+          Already have an account? <a href="https://app.buildsynq.com">Sign in</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success State -->
+    <div class="success-state" id="successView">
+      <div class="success-icon">✅</div>
+      <h3>You're in, welcome to BuildSynq!</h3>
+      <p>We've sent a verification email to <strong id="confirmedEmail"></strong>. Check your inbox to activate your account and start your first project.</p>
+      <a href="https://app.buildsynq.com" class="success-btn">Go to Dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword() {
+  const input = document.getElementById('password');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(val) {
+  const fill = document.getElementById('strengthFill');
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const colors = ['#EF4444', '#F59E0B', '#10B981', '#10B981'];
+  const widths = ['25%', '50%', '75%', '100%'];
+  fill.style.width = score > 0 ? widths[score - 1] : '0%';
+  fill.style.background = score > 0 ? colors[score - 1] : '';
+}
+
+function validate() {
+  let valid = true;
+  const fields = [
+    { id: 'firstName', groupId: 'group-firstName', check: v => v.trim().length > 0 },
+    { id: 'lastName', groupId: 'group-lastName', check: v => v.trim().length > 0 },
+    { id: 'email', groupId: 'group-email', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    { id: 'phone', groupId: 'group-phone', check: v => v.trim().length >= 7 },
+    { id: 'password', groupId: 'group-password', check: v => v.length >= 8 },
+  ];
+  fields.forEach(f => {
+    const val = document.getElementById(f.id).value;
+    const group = document.getElementById(f.groupId);
+    if (!f.check(val)) { group.classList.add('error'); valid = false; }
+    else { group.classList.remove('error'); }
+  });
+  if (!document.getElementById('agreeTerms').checked) {
+    alert('Please agree to the Terms of Service to continue.');
+    valid = false;
+  }
+  return valid;
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+
+  const payload = {
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    password: document.getElementById('password').value,
+    role: 'HOMEOWNER',
+    plan: 'FREE'
+  };
+
+  try {
+    const res = await fetch('https://buildsynq-api.up.railway.app/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      document.getElementById('confirmedEmail').textContent = payload.email;
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('successView').style.display = 'block';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      const msg = data.message || 'Something went wrong. Please try again.';
+      alert(msg);
+      btn.disabled = false;
+      btn.textContent = 'Create Free Account →';
+    }
+  } catch (err) {
+    alert('Unable to connect. Please check your connection and try again.');
+    btn.disabled = false;
+    btn.textContent = 'Create Free Account →';
+  }
+}
+
+// Phone formatting
+document.getElementById('phone').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g, '');
+  if (v.length >= 6) v = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6,10);
+  else if (v.length >= 3) v = '(' + v.slice(0,3) + ') ' + v.slice(3);
+  this.value = v;
+});
+</script>
+</body>
+</html>
